@@ -6,7 +6,7 @@ const Stat = () => {
   useEffect(()=>{
     AOS.init({
       duration:2000,
-      once:false
+      once:true
     })
   },[])
   return (
