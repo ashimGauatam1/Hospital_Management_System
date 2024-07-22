@@ -1,17 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const Stat = () => {
+  useEffect(()=>{
+    AOS.init({
+      duration:2000,
+      once:false
+    })
+  },[])
   return (
     <div>
     <section className="text-gray-600 body-font -mt-20">
       <div className="container px-5 py-24 mx-auto">
         <div className="flex flex-col text-center w-full mb-20">
-          <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-cyan-600">Impact and Performance Overview</h1>
-          <p className="lg:w-2/3 mx-auto leading-relaxed text-base text-gray-950">
+          <h1 data-aos='fade-left' className="sm:text-3xl text-2xl font-medium title-font mb-4 text-cyan-600">Impact and Performance Overview</h1>
+          <p data-aos='fade-right' className="lg:w-2/3 mx-auto leading-relaxed text-base text-gray-950">
           It highlights essential figures such as downloads, user engagement, the number of doctors, and operational locations. These statistics offer valuable insights into our growth, effectiveness, and reach, demonstrating the tangible outcomes of our efforts and the scale of our operations. By examining these numbers, we gain a clearer understanding of our achievements and areas for improvement.
           </p>
         </div>
-        <div className="flex flex-wrap -m-4 text-center">
+        <div className="flex flex-wrap -m-4 text-center" data-aos='fade-down'>
           <div className="p-4 md:w-1/4 sm:w-1/2 w-full">
             <div className="border-2 border-gray-200 px-4 py-6 rounded-lg">
               <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="text-indigo-500 w-12 h-12 mb-3 inline-block" viewBox="0 0 24 24">
