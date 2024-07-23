@@ -1,8 +1,33 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({ setShowLogin }) => {
+  const navigate=useNavigate();
+  const [data,Setdata]=useState({
+    email:'',
+    password:'',
+  })
+  const handleSubmit=async()=>{
+    const response=await axios.post("http://localhost:8080/api/auth/login",data)
+    if(response.status==200){
+      console.log("done");
+      navigate("/");
+      setShowLogin(false);
+    }else{
+      alert("Something went wrong");
+    }
+  }
+
+  const handlechange=(e)=>{
+    const {name,value}=e.target;
+    Setdata({
+      ...data,
+      [name]:value
+    })
+  }
   useEffect(() => {
     AOS.init({
       duration: 2000,
@@ -50,6 +75,7 @@ const Login = ({ setShowLogin }) => {
               <div className="relative flex items-center">
                 <input 
                   name="email" 
+                  onChange={handlechange}
                   type="text" 
                   required 
                   className="w-full text-gray-800 text-sm border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none" 
@@ -71,7 +97,8 @@ const Login = ({ setShowLogin }) => {
               <div className="mt-6">
                 <div className="relative flex items-center">
                   <input 
-                    name="password" 
+                    name="password"
+                    onChange={handlechange} 
                     type="password" 
                     required 
                     className="w-full text-gray-800 text-sm border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none" 
@@ -104,7 +131,8 @@ const Login = ({ setShowLogin }) => {
 
               <div className="mt-12">
                 <button 
-                  type="button" 
+                  type="button"
+                  onClick={handleSubmit} 
                   className="w-full py-2.5 px-4 text-sm font-semibold tracking-wider rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
                 >
                   Log in
