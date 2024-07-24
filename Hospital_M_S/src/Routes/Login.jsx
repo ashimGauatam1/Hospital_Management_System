@@ -123,7 +123,7 @@ const Login = ({ setShowLogin}) => {
                   </label>
                 </div>
                 <div>
-                  <a href="javascript:void(0);" className="text-blue-600 text-sm font-semibold hover:underline">
+                  <a  className="text-blue-600 text-sm font-semibold hover:underline">
                     Forgot Password?
                   </a>
                 </div>
