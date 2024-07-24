@@ -39,12 +39,14 @@ router.post('/login', async (req, res) => {
     if(!pass){
         return res.status(404).send("Incorrect Password");
     }
-    res.json({user});
     const data={
         id:user._id,
     }
-    const token = jwt.sign(data,process.env.SCRT_KEY);
- 
+    const token = jwt.sign(data,process.env.SCRT_KEY,{
+        expiresIn:"1d"});
+    console.log(token);
+    res.json({token:token,name:user.name});
+
 })
 
 router.get("/getuser",UserAuth,async(req,res)=>{

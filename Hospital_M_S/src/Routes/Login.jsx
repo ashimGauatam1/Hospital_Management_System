@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
-const Login = ({ setShowLogin }) => {
-  const navigate=useNavigate();
+const Login = ({ setShowLogin}) => {
+  
   const [data,Setdata]=useState({
     email:'',
     password:'',
@@ -13,8 +12,9 @@ const Login = ({ setShowLogin }) => {
   const handleSubmit=async()=>{
     const response=await axios.post("http://localhost:8080/api/auth/login",data)
     if(response.status==200){
-      console.log("done");
-      navigate("/");
+      console.log(response.data.token);
+      localStorage.setItem("token",response.data.token);
+     window.location.reload();
       setShowLogin(false);
     }else{
       alert("Something went wrong");
