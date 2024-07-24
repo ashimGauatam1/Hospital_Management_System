@@ -7,6 +7,8 @@ import Membership from './Routes/Membership';
 import BookAppointment from './Routes/Bookappointment';
 import Login from './Routes/Login';
 import Profile from './Routes/Profile';
+import Contact from './Routes/Contact';
+import About from './Routes/About';
 
 function App() {
   const [authToken, setAuthToken] = useState(null);
@@ -35,6 +37,8 @@ function App() {
         <Route path='/membership' element={<Membership />}/>
         <Route path='/appointment' element={<BookAppointment authToken={authToken} isAuthenticated={isAuthenticated}/>}/>
         <Route path='/profile' element={<Profile authToken={authToken}/>}/>
+        <Route path='/contact' element={<Contact/>}/>
+        <Route path='/about' element={<About/>}/>
       </Routes>
     </BrowserRouter>
   );

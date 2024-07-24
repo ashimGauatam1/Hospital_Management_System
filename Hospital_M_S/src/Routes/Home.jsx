@@ -5,6 +5,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Footer from '../Components/Footer';
 import main from '../assets/img/main.png';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   useEffect(()=>{
@@ -27,8 +28,8 @@ const Home = () => {
             <h1 className="title-font sm:text-4xl text-3xl   text-cyan-900 font-bold" data-aos='fade-left'>Your Path To Health</h1>
             <p className="mb-8 leading-relaxed italic font-semibold mt-5" data-aos='fade-right'>Nourish your body with wholesome foods, embrace the power of movement, and cultivate a balanced mind. Each day is a step towards a healthier you. Prioritize sleep, stay hydrated, and connect with nature. Let your wellness journey be fueled by self-love and determination. Small changes lead to big results – choose to thrive.</p>
             <div className="flex justify-center -mt-5">
-              <button data-aos='fade-up'className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-900 rounded text-lg">Book Appointment</button>
-              <button data-aos='fade-down' className="ml-4 inline-flex text-gray-900 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-400 rounded text-lg">Your Health</button>
+              <Link to={'/appointment'} data-aos='fade-up'className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-900 rounded text-lg">Book Appointment</Link>
+              <Link to={'/profile'} data-aos='fade-down' className="ml-4 inline-flex text-gray-900 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-400 rounded text-lg">Your Health</Link>
             </div>
           </div>
         </div>
