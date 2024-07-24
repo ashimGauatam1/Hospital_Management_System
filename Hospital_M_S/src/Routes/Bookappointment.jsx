@@ -32,7 +32,6 @@ const BookAppointment = ({ isAuthenticated, authToken }) => {
     
   };
 
-  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({
