@@ -5,11 +5,10 @@ import Signup from './Routes/Signup';
 import Navbar from './Components/Navbar';
 import Membership from './Routes/Membership';
 import BookAppointment from './Routes/Bookappointment';
-import Login from './Routes/Login';
 import Profile from './Routes/Profile';
 import Contact from './Routes/Contact';
 import About from './Routes/About';
-
+import Payment from './Components/Checkoutform';
 function App() {
   const [authToken, setAuthToken] = useState(null);
   // const handlelogin=(authToken)=>{
@@ -39,6 +38,7 @@ function App() {
         <Route path='/profile' element={<Profile authToken={authToken}/>}/>
         <Route path='/contact' element={<Contact/>}/>
         <Route path='/about' element={<About/>}/>
+        <Route path='/checkout' element={<Payment/>}/>
       </Routes>
     </BrowserRouter>
   );

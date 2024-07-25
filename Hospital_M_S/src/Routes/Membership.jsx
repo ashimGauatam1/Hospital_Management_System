@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Alert from "../Components/Alert";
+import { Link } from "react-router-dom";
 const Membership = () => {
   useEffect(() => {
     AOS.init({
@@ -8,10 +10,14 @@ const Membership = () => {
       once: true,
     });
   }, []);
+  const Enamount=150;
+  const Preamount=49;
+  const Buamount=99;
   return (
     <div>
+      <Alert/>
       <section className="text-gray-600 body-font overflow-hidden">
-        <div className="container px-5 py-24 mx-auto">
+        <div className="container px-5 py-20 mx-auto">
           <div className="flex flex-col text-center w-full mb-20">
             <h1
               data-aos="fade-left"
@@ -190,7 +196,7 @@ const Membership = () => {
                   </span>
                   Exclusive Discounts on Services
                 </p>
-                <button className="flex items-center mt-auto text-white bg-cyan-700 border-0 py-2 px-4 w-full focus:outline-none hover:bg-cyan-600 rounded">
+                <Link to={`/checkout?amount=${Preamount}`} className="flex items-center mt-auto text-white bg-cyan-700 border-0 py-2 px-4 w-full focus:outline-none hover:bg-cyan-600 rounded">
                   Choose Plan
                   <svg
                     fill="none"
@@ -203,7 +209,7 @@ const Membership = () => {
                   >
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
-                </button>
+                </Link>
                 <p className="text-xs text-gray-500 mt-3">
                   Get the most out of our healthcare services with priority
                   access and more.
@@ -285,7 +291,7 @@ const Membership = () => {
                   </span>
                   Dedicated Account Manager
                 </p>
-                <button className="flex items-center mt-auto text-white bg-gray-400 border-0 py-2 px-4 w-full focus:outline-none hover:bg-gray-500 rounded">
+                <Link to={`/checkout?amount=${Buamount}`} className="flex items-center mt-auto text-white bg-gray-400 border-0 py-2 px-4 w-full focus:outline-none hover:bg-gray-500 rounded">
                   Choose Plan
                   <svg
                     fill="none"
@@ -298,7 +304,7 @@ const Membership = () => {
                   >
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
-                </button>
+                </Link>
                 <p className="text-xs text-gray-500 mt-3">
                   Ideal for companies and organizations seeking comprehensive
                   health services.
@@ -380,7 +386,8 @@ const Membership = () => {
                   </span>
                   Regular Health Assessments
                 </p>
-                <button className="flex items-center mt-auto text-white bg-gray-400 border-0 py-2 px-4 w-full focus:outline-none hover:bg-gray-500 rounded">
+                <Link to={`/checkout?amount=${Enamount}`} 
+       className="flex items-center mt-auto text-white bg-gray-400 border-0 py-2 px-4 w-full focus:outline-none hover:bg-gray-500 rounded">
                   Choose Plan
                   <svg
                     fill="none"
@@ -393,7 +400,7 @@ const Membership = () => {
                   >
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
-                </button>
+                </Link>
                 <p className="text-xs text-gray-500 mt-3">
                   Perfect for large enterprises requiring extensive healthcare
                   services.
