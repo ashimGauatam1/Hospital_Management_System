@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import { useSearchParams } from 'react-router-dom';
+import axios from 'axios';
 
-const CheckoutForm = () => {
+const CheckoutForm = ({ authToken }) => {
   const [searchParams] = useSearchParams();
-  const paidamount = searchParams.get('amount')
+  const paidAmount = searchParams.get('amount');
+  const typeParam = searchParams.get('type');
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [data, setData] = useState({ type: typeParam });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -27,7 +30,7 @@ const CheckoutForm = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ amount }), 
+        body: JSON.stringify({ amount: paidAmount }),
       });
 
       if (!response.ok) {
@@ -46,11 +49,31 @@ const CheckoutForm = () => {
         setError(error.message);
       } else if (paymentIntent.status === 'succeeded') {
         setSuccess(true);
+        await setUserType();
       }
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const setUserType = async () => {
+    try {
+      const response = await axios.put(
+        'http://localhost:8080/api/auth/update-type',
+        { type: data.type },
+        { headers: { 'auth-token': authToken } }
+      );
+
+      if (response.status === 200) {
+        setData({ type: response.data.user.type });
+        // localStorage.setItem('typeofuser', response.data.user.type);
+      } else {
+        alert('Error');
+      }
+    } catch (err) {
+      console.error('Error setting user type:', err);
     }
   };
 
@@ -61,8 +84,8 @@ const CheckoutForm = () => {
         <input
           id="amount"
           disabled
-          value={paidamount}
-          onChange={(e) => setAmount(e.target.value)}
+          value={paidAmount}
+          onChange={(e) => setData({ ...data, amount: e.target.value })}
           className="block w-full border border-gray-300 rounded-md p-2 mb-4 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
           min="1"
         />

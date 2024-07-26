@@ -16,7 +16,6 @@ const UserSchema = new Schema({
   },
   type:{
     type:String,
-    default:"user"
   },
   date: {
     type: Date,

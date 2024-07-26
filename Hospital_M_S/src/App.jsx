@@ -12,11 +12,12 @@ import Payment from './Components/Checkoutform';
 import Login from './Routes/Login';
 function App() {
   const [authToken, setAuthToken] = useState(null);
-  
+  const [userType,SetuserType]=useState("");
   useEffect(() => {
     const token = localStorage.getItem('token');
     const tokenTimestamp = localStorage.getItem('tokenTimestamp');
-
+    const user_type=localStorage.getItem('user_type');
+    SetuserType(user_type);
     if (token && tokenTimestamp) {
       const now = Date.now();
       const oneDay = 24 * 60 * 60 * 1000;
@@ -39,11 +40,11 @@ function App() {
     setAuthToken(null);
     localStorage.removeItem('token');
     localStorage.removeItem('tokenTimestamp');
+    localStorage.removeItem('user_type');
   };
-  // setTimeout(()=>{
-  //   handleLogout();
-  // },[24*60*60*1000])
   const isAuthenticated = !!authToken;
+  const ismember=!!userType;
+
   return (
     <BrowserRouter>
     <Navbar isAuthenticated={isAuthenticated}  handleLogout={handleLogout}/>
@@ -51,11 +52,11 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/register' element={<Signup />} />
         <Route path='/membership' element={<Membership />}/>
-        <Route path='/appointment' element={<BookAppointment authToken={authToken} isAuthenticated={isAuthenticated}/>}/>
+        <Route path='/appointment' element={<BookAppointment authToken={authToken} ismember={ismember} isAuthenticated={isAuthenticated}/>}/>
         <Route path='/profile' element={<Profile authToken={authToken}/>}/>
         <Route path='/contact' element={<Contact/>}/>
         <Route path='/about' element={<About/>}/>
-        <Route path='/checkout' element={<Payment/>}/>
+        <Route path='/checkout' element={<Payment authToken={authToken}/>}/>
         <Route element={<Login handleLogout={handleLogout}/>}/>
       </Routes>
     </BrowserRouter>

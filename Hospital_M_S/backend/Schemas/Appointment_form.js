@@ -18,6 +18,9 @@ const AppSchema=new Schema({
         type: String,
         required: true
       },
+      doctor:{
+        type:String
+      },
       date: {
         type: Date,
         default: Date.now()
@@ -30,6 +33,7 @@ const AppSchema=new Schema({
         type: String,
         required: true
       }
+
 })
 
 const Appoint =mongoose.model('Appoint',AppSchema)

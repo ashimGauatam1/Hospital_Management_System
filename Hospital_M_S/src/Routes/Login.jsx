@@ -21,6 +21,7 @@ const Login = ({ setShowLogin,handleLogout}) => {
       console.log(response.data.token);
       localStorage.setItem("token",response.data.token);
       localStorage.setItem('tokenTimestamp', now.toString());
+      localStorage.setItem('user_type',response.data.type);
      window.location.reload();
       setShowLogin(false);
       setLogoutTimeout(24 * 60 * 60 * 1000);

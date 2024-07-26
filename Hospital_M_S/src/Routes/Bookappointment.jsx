@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import axios from 'axios';
+import doctors from '../assets/objects/Doctor';
 
-const BookAppointment = ({ isAuthenticated, authToken }) => {
+const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
   const [data, setData] = useState({
     name: '',
     email: '',
     phone: '',
+    doctor: '',
     date: '',
     time: '',
     problem: ''
@@ -21,15 +23,14 @@ const BookAppointment = ({ isAuthenticated, authToken }) => {
       if (response.status === 200) {
         setData(response.data);
         window.location.reload();
-        console.log("done hai0");
+        console.log("Appointment booked successfully");
       } else {
         alert("Something went wrong");
       }
     } catch (error) {
       console.error(error);
-      alert("An error occurred while fetching data");
+      alert("An error occurred while booking the appointment");
     }
-    
   };
 
   const handleChange = (e) => {
@@ -121,6 +122,23 @@ const BookAppointment = ({ isAuthenticated, authToken }) => {
                 maxLength={50}
                 onChange={handleChange}
               />
+            </div>
+            <div>
+              <label htmlFor="doctor" className="block text-cyan-700 text-sm font-medium mb-2">Choose a Doctor</label>
+              <select
+                id="doctor"
+                name="doctor"
+                value={data.doctor}
+                onChange={handleChange}
+                className="block w-full border border-gray-300 rounded-md p-2 mb-4 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+              >
+                <option value="" disabled>Select a doctor</option>
+                {doctors.map((doctor) => (
+                  <option key={doctor.id} value={doctor.name}>
+                    {doctor.name} - {doctor.specialty}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label htmlFor="date" className="block text-sm font-medium text-gray-700">
