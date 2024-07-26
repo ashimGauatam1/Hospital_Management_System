@@ -84,7 +84,7 @@ const Profile = ({ authToken }) => {
         </div>
         <div className="mt-8">
           <h2 data-aos='flip-in' className="text-2xl font-bold text-center text-gray-700 mb-4">Appointment History</h2>
-          <div className="flex overflow-x-auto" >
+          <div className="flex overflow-x-auto gap-2 ml-4 mr-4 " >
             {userHistory.map((appointment, index) => (
               <Card
                 key={index}

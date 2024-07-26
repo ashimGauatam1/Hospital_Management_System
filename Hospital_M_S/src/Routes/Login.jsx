@@ -3,19 +3,27 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import axios from 'axios';
 
-const Login = ({ setShowLogin}) => {
-  
+const Login = ({ setShowLogin,handleLogout}) => {
+
   const [data,Setdata]=useState({
     email:'',
     password:'',
   })
+  const setLogoutTimeout = (timeout) => {
+    setTimeout(() => {
+      handleLogout();
+    }, timeout);
+  }
   const handleSubmit=async()=>{
     const response=await axios.post("http://localhost:8080/api/auth/login",data)
     if(response.status==200){
+      const now = Date.now();
       console.log(response.data.token);
       localStorage.setItem("token",response.data.token);
+      localStorage.setItem('tokenTimestamp', now.toString());
      window.location.reload();
       setShowLogin(false);
+      setLogoutTimeout(24 * 60 * 60 * 1000);
     }else{
       alert("Something went wrong");
     }

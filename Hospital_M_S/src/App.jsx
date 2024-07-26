@@ -9,23 +9,40 @@ import Profile from './Routes/Profile';
 import Contact from './Routes/Contact';
 import About from './Routes/About';
 import Payment from './Components/Checkoutform';
+import Login from './Routes/Login';
 function App() {
   const [authToken, setAuthToken] = useState(null);
-  // const handlelogin=(authToken)=>{
-  //   setAuthToken(authToken);
-  // }
-    useEffect(()=>{
-     const token= localStorage.getItem('token');
-      setAuthToken(token);
-    },[])  
   
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const tokenTimestamp = localStorage.getItem('tokenTimestamp');
+
+    if (token && tokenTimestamp) {
+      const now = Date.now();
+      const oneDay = 24 * 60 * 60 * 1000;
+
+      if (now - parseInt(tokenTimestamp) >= oneDay) {
+        handleLogout();
+      } else {
+        setAuthToken(token);
+        const remainingTime = oneDay - (now - parseInt(tokenTimestamp));
+        setLogoutTimeout(remainingTime);
+      }
+    }
+  }, []);
+  const setLogoutTimeout = (timeout) => {
+    setTimeout(() => {
+      handleLogout();
+    }, timeout);
+  };
   const handleLogout = () => {
     setAuthToken(null);
     localStorage.removeItem('token');
+    localStorage.removeItem('tokenTimestamp');
   };
-  setTimeout(()=>{
-    handleLogout();
-  },[24*60*60*1000])
+  // setTimeout(()=>{
+  //   handleLogout();
+  // },[24*60*60*1000])
   const isAuthenticated = !!authToken;
   return (
     <BrowserRouter>
@@ -39,6 +56,7 @@ function App() {
         <Route path='/contact' element={<Contact/>}/>
         <Route path='/about' element={<About/>}/>
         <Route path='/checkout' element={<Payment/>}/>
+        <Route element={<Login handleLogout={handleLogout}/>}/>
       </Routes>
     </BrowserRouter>
   );

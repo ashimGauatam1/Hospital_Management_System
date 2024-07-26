@@ -14,7 +14,7 @@ router.post('/register',UserAuth,async(req,res)=>{
         problem,
         user:req.user.id
     })
-    // await book.save();
+    await book.save();
     res.send(book);
 })
 

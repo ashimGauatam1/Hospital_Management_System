@@ -20,7 +20,7 @@ const AppSchema=new Schema({
       },
       date: {
         type: Date,
-        default: Date.now
+        default: Date.now()
       },
       time: {
         type: String,
