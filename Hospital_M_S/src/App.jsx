@@ -52,11 +52,11 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/register' element={<Signup />} />
         <Route path='/membership' element={<Membership />}/>
-        <Route path='/appointment' element={<BookAppointment authToken={authToken} ismember={ismember} isAuthenticated={isAuthenticated}/>}/>
-        <Route path='/profile' element={<Profile authToken={authToken}/>}/>
+        <Route path='/appointment' element={<BookAppointment authToken={authToken}  ismember={ismember} isAuthenticated={isAuthenticated}/>}/>
+        <Route path='/profile' element={<Profile authToken={authToken} isAuthenticated={isAuthenticated}/>}/>
         <Route path='/contact' element={<Contact/>}/>
         <Route path='/about' element={<About/>}/>
-        <Route path='/checkout' element={<Payment authToken={authToken}/>}/>
+        <Route path='/checkout' element={<Payment authToken={authToken} isAuthenticated={isAuthenticated}/>}/>
         <Route element={<Login handleLogout={handleLogout}/>}/>
       </Routes>
     </BrowserRouter>
