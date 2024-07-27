@@ -10,6 +10,7 @@ import Contact from './Routes/Contact';
 import About from './Routes/About';
 import Payment from './Components/Checkoutform';
 import Login from './Routes/Login';
+
 function App() {
   const [authToken, setAuthToken] = useState(null);
   const [userType,SetuserType]=useState("");
@@ -44,7 +45,8 @@ function App() {
   };
   const isAuthenticated = !!authToken;
   const ismember=!!userType;
-
+console.log(userType);
+console.log(authToken)
   return (
     <BrowserRouter>
     <Navbar isAuthenticated={isAuthenticated}  handleLogout={handleLogout}/>

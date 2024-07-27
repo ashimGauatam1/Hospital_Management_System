@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Profile = ({ authToken, isAuthenticated }) => {
   const navigate = useNavigate();
+ 
   const [userData, setUserData] = useState({
     name: '',
     email: '',
@@ -22,7 +23,7 @@ const Profile = ({ authToken, isAuthenticated }) => {
       duration: 2000,
       once: true
     });
-
+    
     const fetchUserData = async () => {
       try {
         console.log("Auth Token:", authToken);

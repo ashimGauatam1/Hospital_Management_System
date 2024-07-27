@@ -14,7 +14,6 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
     time: "",
     problem: "",
   });
-
   const fetchUser = async () => {
     try {
       const response = await axios.post(
@@ -198,6 +197,8 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     onChange={handleChange}
                   />
                 </div>
+                {
+                  ismember ?
                 <div>
                   <label
                     htmlFor="doctor"
@@ -222,6 +223,9 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     ))}
                   </select>
                 </div>
+                :
+                <></>
+              }
                 <div>
                   <label
                     htmlFor="date"

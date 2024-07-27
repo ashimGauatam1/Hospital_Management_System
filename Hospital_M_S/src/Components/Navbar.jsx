@@ -4,7 +4,7 @@ import Login from '../Routes/Login';
 
 const Navbar = ({ isAuthenticated, handleLogout }) => {
   const [showLogin, setShowLogin] = useState(false);
-  
+ 
   return (
     <>
       <div>
@@ -36,12 +36,13 @@ const Navbar = ({ isAuthenticated, handleLogout }) => {
                 <button onClick={handleLogout} className="mr-5 hover:text-gray-900">Log Out</button>
               }
             </nav>
-            <Link to={'/profile'} className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mt-4 md:mt-0">
+            <a href="/profile" className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mt-4 md:mt-0">
               Your Profile
+              
               <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-1" viewBox="0 0 24 24">
                 <path d="M5 12h14M12 5l7 7-7 7"></path>
               </svg>
-            </Link>
+            </a>
           </div>
         </header>
         {showLogin && <Login setShowLogin={setShowLogin} />}
