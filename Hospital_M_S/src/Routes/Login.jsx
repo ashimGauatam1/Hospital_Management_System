@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import axios from 'axios';
+import Alert from '../Components/Alert';
 
 const Login = ({ setShowLogin,handleLogout}) => {
-  
+  const [type,SetType]=useState('');
+  const [message,setMessage]=useState('');
+  const [alerts,setAlert]=useState(false);
   const [data,Setdata]=useState({
     email:'',
     password:'',
@@ -25,9 +28,14 @@ const Login = ({ setShowLogin,handleLogout}) => {
      window.location.reload();
       setShowLogin(false);
       setLogoutTimeout(24 * 60 * 60 * 1000);
+    }else if(response.status===404){
+      SetType('error')
+      setMessage("Invalid Credentials");
+      setAlert(true);
     }else{
       SetType('error');
-      SetMessage("Invalid Credentials");
+      setMessage("Invalid Credentials");
+      setAlert(true)
     }
   }
 
@@ -47,7 +55,11 @@ const Login = ({ setShowLogin,handleLogout}) => {
 
   return (
     <>
-     
+      {alerts && (
+          <div className="ml-5  py-20  -mb-20">
+            <Alert type={type} message={message} onClose={() => setAlert(false)} />
+          </div>
+        )}
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div 
         className="absolute inset-0 bg-black opacity-50" 

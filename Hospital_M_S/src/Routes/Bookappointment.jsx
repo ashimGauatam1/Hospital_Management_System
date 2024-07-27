@@ -3,8 +3,12 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import axios from "axios";
 import doctors from "../assets/objects/Doctor";
+import Alert from "../Components/Alert";
 
 const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
+  const [type,SetType]=useState('');
+  const [message,setMessage]=useState('');
+  const [alerts,setAlert]=useState(false);
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -26,9 +30,13 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
       if (response.status === 200) {
         setData(response.data);
         window.location.reload();
-        console.log("Appointment booked successfully");
+        SetType('success')
+        setMessage('Appointment booked successfully you will be informed further through mail and phone')
+        setAlert(true)
       } else {
-        alert("Something went wrong");
+        SetType('danger')
+        setMessage("something went wrong")
+        setAlert(true)
       }
     } catch (error) {
       console.error(error);
@@ -61,6 +69,11 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
     <>
       {!isAuthenticated ? (
         <>
+         {alerts && (
+          <div className="ml-5  py-20  -mb-20">
+            <Alert type={type} message={message} onClose={() => setAlert(false)} />
+          </div>
+        )}
       <div className="py-20 flex justify-center items-center min-h-screen">
       <img
       data-aos='zoom-in'

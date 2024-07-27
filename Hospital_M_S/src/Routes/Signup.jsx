@@ -15,6 +15,12 @@ const Signup = () => {
   });
 
   const fetchUser = async () => {
+    if (!data.name && !data.email && !data.password) {
+      setType('error');
+      setMessage('Please fill in all fields.');
+      setAlert(true);
+    } else {
+    
     try {
       const response = await axios.post('http://localhost:8080/api/auth/register', data);
         console.log(response.data.status)
@@ -33,7 +39,7 @@ const Signup = () => {
         setType('error');
         setMessage('Something went wrong');
       }
-
+    }
     }
   };
  
