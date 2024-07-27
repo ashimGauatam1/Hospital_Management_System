@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Alert from "../Components/Alert";
 import { Link } from "react-router-dom";
 const Membership = () => {
   useEffect(() => {
@@ -16,9 +15,9 @@ const Membership = () => {
   const type2='Business';
   const type1='Premium';
   const type3='Enterprise';
+  
   return (
     <div>
-      <Alert/>
       <section className="text-gray-600 body-font overflow-hidden">
         <div className="container px-5 py-20 mx-auto">
           <div className="flex flex-col text-center w-full mb-20">

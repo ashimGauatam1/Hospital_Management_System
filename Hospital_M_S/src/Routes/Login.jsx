@@ -4,7 +4,7 @@ import 'aos/dist/aos.css';
 import axios from 'axios';
 
 const Login = ({ setShowLogin,handleLogout}) => {
-
+  
   const [data,Setdata]=useState({
     email:'',
     password:'',
@@ -26,7 +26,8 @@ const Login = ({ setShowLogin,handleLogout}) => {
       setShowLogin(false);
       setLogoutTimeout(24 * 60 * 60 * 1000);
     }else{
-      alert("Something went wrong");
+      SetType('error');
+      SetMessage("Invalid Credentials");
     }
   }
 
@@ -47,7 +48,6 @@ const Login = ({ setShowLogin,handleLogout}) => {
   return (
     <>
      
-    
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div 
         className="absolute inset-0 bg-black opacity-50" 
