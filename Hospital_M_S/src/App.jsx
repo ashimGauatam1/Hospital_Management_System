@@ -51,7 +51,7 @@ console.log(userType);
 console.log(authToken)
   return (
     <BrowserRouter>
-    {/* <Navbar isAuthenticated={isAuthenticated}  handleLogout={handleLogout}/> */}
+    <Navbar isAuthenticated={isAuthenticated}  handleLogout={handleLogout}/>
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/register' element={<Signup />} />
