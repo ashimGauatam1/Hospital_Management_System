@@ -28,9 +28,7 @@ const Signup = () => {
         console.log(response.data.status)
       if (response.status === 200) {
         setData(response.data);
-        setType('success');
-        setMessage('Registration Successful, now login');
-        setAlert(true);
+        
         navigate('/otpverification');
       }
     } catch (error) {

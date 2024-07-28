@@ -45,7 +45,7 @@ const Alert = ({ type, message, onClose }) => {
   };
 
   return (
-    <div className={`text-white font-semibold tracking-wide flex items-center w-max max-w-sm p-4 rounded-md shadow-md ${colors[type]}`} role="alert">
+    <div className={`bg-gray-100 text-white font-semibold tracking-wide flex items-center w-max max-w-sm p-4 rounded-md shadow-md ${colors[type]}`} role="alert">
       {renderIcon(type)}
       <span className="block sm:inline text-sm mr-3">{message}</span>
       <svg

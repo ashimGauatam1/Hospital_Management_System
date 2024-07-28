@@ -55,7 +55,8 @@ router.post('/verify',async(req,res)=>{
     if (!user) {
       return res.status(400).json({ message: "Invalid OTP" });
     }
-    console.log(user);
+    console.log(user.otp);
+    console.log(req.body.enteredOtp)
     await user.save();
     return res.json({ message: "OTP verified successfully" });
   } catch (error) {
