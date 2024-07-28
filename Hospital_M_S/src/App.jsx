@@ -10,6 +10,7 @@ import Contact from './Routes/Contact';
 import About from './Routes/About';
 import Payment from './Components/Checkoutform';
 import Login from './Routes/Login';
+import Otp_verify from './Routes/Otp_verify';
 
 function App() {
   const [authToken, setAuthToken] = useState(null);
@@ -60,6 +61,7 @@ console.log(authToken)
         <Route path='/about' element={<About/>}/>
         <Route path='/checkout' element={<Payment authToken={authToken} isAuthenticated={isAuthenticated}/>}/>
         <Route element={<Login handleLogout={handleLogout}/>}/>
+        <Route path='/otpverification' element={<Otp_verify isAuthenticated={isAuthenticated}/>}/>
       </Routes>
     </BrowserRouter>
   );

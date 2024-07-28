@@ -3,6 +3,7 @@ import User from "../Schemas/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import UserAuth from "../middleware/UserFetch.js";
+import sendEmail from "../middleware/Gmail.js";
 
 const router = express.Router();
 
@@ -19,12 +20,27 @@ router.post("/register", async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const newPass = await bcrypt.hash(password, salt);
 
+    const otp = Math.floor(Math.random() * 900000) + 100000; // otp generate
+    const htmlbody=`
+     <h1>OTP Verification</h1>
+        Dear <p class='text-red-600 font-bold'> ${name},</p>
+        <p>Thank you for registering with us. To complete your registration, please use the following OTP code:</p>
+        <div class="text-cyan-900 font-bold">${otp}</div>
+        <p>This code is valid for the next 10 minutes. If you did not request this, please ignore this email.</p>
+        <p>If you have any questions or need further assistance, feel free to <a href=${"http://localhost:5173/contact"}>contact us</a>.</p>
+        <div class="footer">
+            <p>Best regards,<br class='text-green-600'>The City Hospital Team</p>`
+     const sentmail=await sendEmail(
+      email,
+      "otp verification",
+      htmlbody
+    )
     const user = new User({
       name,
       email,
       password: newPass,
-    });
-
+      otp,
+    });  
     await user.save();
     res.json(user);
   } catch (error) {
@@ -32,6 +48,22 @@ router.post("/register", async (req, res) => {
     res.send({ errors: error });
   }
 });
+
+router.post('/verify',async(req,res)=>{
+  try {
+    const user = await User.findOne({ otp: req.body.enteredOtp });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+    console.log(user);
+    await user.save();
+    return res.json({ message: "OTP verified successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+
+})
 
 // Login route
 router.post('/login', async (req, res) => {

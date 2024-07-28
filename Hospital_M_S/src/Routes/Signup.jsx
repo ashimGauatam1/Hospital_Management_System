@@ -3,8 +3,10 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import axios from 'axios';
 import Alert from '../Components/Alert';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
+  const navigate=useNavigate();
   const [type, setType] = useState('');
   const [message, setMessage] = useState('');
   const [alerts, setAlert] = useState(false);
@@ -29,6 +31,7 @@ const Signup = () => {
         setType('success');
         setMessage('Registration Successful, now login');
         setAlert(true);
+        navigate('/otpverification');
       }
     } catch (error) {
       if (error.response.status === 404) {
