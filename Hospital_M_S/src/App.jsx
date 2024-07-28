@@ -11,6 +11,7 @@ import About from './Routes/About';
 import Payment from './Components/Checkoutform';
 import Login from './Routes/Login';
 import Otp_verify from './Routes/Otp_verify';
+import MedicineSearch from './Routes/DrugInfo';
 
 function App() {
   const [authToken, setAuthToken] = useState(null);
@@ -50,7 +51,7 @@ console.log(userType);
 console.log(authToken)
   return (
     <BrowserRouter>
-    <Navbar isAuthenticated={isAuthenticated}  handleLogout={handleLogout}/>
+    {/* <Navbar isAuthenticated={isAuthenticated}  handleLogout={handleLogout}/> */}
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/register' element={<Signup />} />
@@ -62,6 +63,7 @@ console.log(authToken)
         <Route path='/checkout' element={<Payment authToken={authToken} isAuthenticated={isAuthenticated}/>}/>
         <Route element={<Login handleLogout={handleLogout}/>}/>
         <Route path='/otpverification' element={<Otp_verify isAuthenticated={isAuthenticated}/>}/>
+        <Route path='/medicineinfo' element={<MedicineSearch/>}/>
       </Routes>
     </BrowserRouter>
   );
