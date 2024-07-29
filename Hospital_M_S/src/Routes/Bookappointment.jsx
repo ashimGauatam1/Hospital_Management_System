@@ -6,9 +6,11 @@ import doctors from "../assets/objects/Doctor";
 import Alert from "../Components/Alert";
 
 const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
-  const [type,SetType]=useState('');
-  const [message,setMessage]=useState('');
-  const [alerts,setAlert]=useState(false);
+ 
+  const [type, SetType] = useState('');
+  const [message, setMessage] = useState('');
+  const [alerts, setAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -18,29 +20,47 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
     time: "",
     problem: "",
   });
+
+  // Function to select a random doctor
+  const getRandomDoctor = () => {
+    const randomIndex = Math.floor(Math.random() * doctors.length);
+    return doctors[randomIndex].name;
+  };
+
   const fetchUser = async () => {
+    setLoading(true);
+
     try {
+      const appointmentData = {
+        ...data,
+        doctor: data.doctor || getRandomDoctor(),
+      };
+
       const response = await axios.post(
         "http://localhost:8080/api/appoint/register",
-        data,
+        appointmentData,
         {
           headers: { "auth-token": authToken },
         }
       );
+
       if (response.status === 200) {
         setData(response.data);
-        window.location.reload();
-        SetType('success')
-        setMessage('Appointment booked successfully you will be informed further through mail and phone')
-        setAlert(true)
+        SetType('success');
+        setMessage('Appointment booked successfully. You will be informed further through mail and phone.');
+        setAlert(true);
       } else {
-        SetType('danger')
-        setMessage("something went wrong")
-        setAlert(true)
+        SetType('danger');
+        setMessage("Something went wrong.");
+        setAlert(true);
       }
     } catch (error) {
       console.error(error);
-      alert("An error occurred while booking the appointment");
+      SetType('danger');
+      setMessage("An error occurred while booking the appointment.");
+      setAlert(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,7 +79,6 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
     });
   }, []);
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     fetchUser();
@@ -69,21 +88,21 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
     <>
       {!isAuthenticated ? (
         <>
-         {alerts && (
-          <div className="ml-5  py-20  -mb-20">
-            <Alert type={type} message={message} onClose={() => setAlert(false)} />
+          {alerts && (
+            <div className="ml-5 py-20 -mb-20">
+              <Alert type={type} message={message} onClose={() => setAlert(false)} />
+            </div>
+          )}
+          <div className="py-20 flex justify-center items-center min-h-screen">
+            <img
+              data-aos='zoom-in'
+              className="w-50 h-50"
+              src="https://img.freepik.com/free-vector/403-error-forbidden-with-police-concept-illustration_114360-1904.jpg?t=st=1722009703~exp=1722013303~hmac=f8743ec79b03629cd8f7be7a5632551c77d7ed3ac0ce8847be37ac115ee55a67&w=360"
+              alt="Error 403 Forbidden"
+            />
           </div>
-        )}
-      <div className="py-20 flex justify-center items-center min-h-screen">
-      <img
-      data-aos='zoom-in'
-        className="w-50 h-50"
-        src="https://img.freepik.com/free-vector/403-error-forbidden-with-police-concept-illustration_114360-1904.jpg?t=st=1722009703~exp=1722013303~hmac=f8743ec79b03629cd8f7be7a5632551c77d7ed3ac0ce8847be37ac115ee55a67&w=360"
-        alt="Error 403 Forbidden"
-      />
-    </div>
-      <h1  className="-mt-20 text-center font-serif font-extrabold text-cyan-800">PLEASE LOGIN/SIGN UP FIRST</h1>
-    </>
+          <h1 className="-mt-20 text-center font-serif font-extrabold text-cyan-800">PLEASE LOGIN/SIGN UP FIRST</h1>
+        </>
       ) : (
         <>
           <div className="py-20 flex justify-around">
@@ -117,8 +136,7 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
               data-aos="fade-left"
               className="text-center italic -mt-8 mb-5 justify-around text-gray-500"
             >
-              If you have taken any memberships, you can select your desired
-              doctor and book an appointment
+              If you have taken any memberships, you can select your desired doctor and book an appointment
             </div>
             <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
               <form
@@ -131,8 +149,7 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                 </div>
                 <ul className="list-disc list-inside space-y-4">
                   <li className="text-sm text-gray-700 font-bold">
-                    Please make sure that the details are correct before booking
-                    an appointment
+                    Please make sure that the details are correct before booking an appointment
                   </li>
                   <li className="text-sm text-gray-700 font-bold">
                     Your appointment will be confirmed within 15 minutes
@@ -141,16 +158,13 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     Make sure that the appointment time will vary
                   </li>
                   <li className="text-sm text-gray-700 font-bold">
-                    You will be informed about your appointment time by phone
-                    and mail, so please be on time
+                    You will be informed about your appointment time by phone and mail, so please be on time
                   </li>
                   <li className="text-sm text-gray-700 font-bold">
-                    Booking an appointment is free, but you will be charged for
-                    the services
+                    Booking an appointment is free, but you will be charged for the services
                   </li>
                   <li className="text-sm text-gray-700 font-bold">
-                    If you cancel the appointment, you will not be charged, but
-                    make sure to inform us at least 2 hours before.
+                    If you cancel the appointment, you will not be charged, but make sure to inform us at least 2 hours before.
                   </li>
                 </ul>
                 <div>
@@ -210,35 +224,32 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     onChange={handleChange}
                   />
                 </div>
-                {
-                  ismember ?
-                <div>
-                  <label
-                    htmlFor="doctor"
-                    className="block text-cyan-700 text-sm font-medium mb-2"
-                  >
-                    Choose a Doctor
-                  </label>
-                  <select
-                    id="doctor"
-                    name="doctor"
-                    value={data.doctor}
-                    onChange={handleChange}
-                    className="block w-full border border-gray-300 rounded-md p-2 mb-4 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
-                  >
-                    <option value="" disabled>
-                      Select a doctor
-                    </option>
-                    {doctors.map((doctor) => (
-                      <option key={doctor.id} value={doctor.name}>
-                        {doctor.name} - {doctor.specialty}
+                {ismember && (
+                  <div>
+                    <label
+                      htmlFor="doctor"
+                      className="block text-cyan-700 text-sm font-medium mb-2"
+                    >
+                      Choose a Doctor
+                    </label>
+                    <select
+                      id="doctor"
+                      name="doctor"
+                      value={data.doctor}
+                      onChange={handleChange}
+                      className="block w-full border border-gray-300 rounded-md p-2 mb-4 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                    >
+                      <option value="" disabled>
+                        Select a doctor
                       </option>
-                    ))}
-                  </select>
-                </div>
-                :
-                <></>
-              }
+                      {doctors.map((doctor) => (
+                        <option key={doctor.id} value={doctor.name}>
+                          {doctor.name} - {doctor.specialty}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
                 <div>
                   <label
                     htmlFor="date"
@@ -293,14 +304,18 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     type="submit"
                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-700 hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-800"
                   >
-                    Book Appointment
+                    {loading ? (
+                      <span>Loading...</span>
+                    ) : (
+                      'Book Appointment'
+                    )}
                   </button>
                 </div>
               </form>
             </div>
           </div>
         </>
-      )}{" "}
+      )}
     </>
   );
 };

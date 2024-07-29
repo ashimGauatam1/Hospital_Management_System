@@ -21,6 +21,7 @@ router.post("/register", async (req, res) => {
     const newPass = await bcrypt.hash(password, salt);
 
     const otp = Math.floor(Math.random() * 900000) + 100000; // otp generate
+    console.log(otp);
     const htmlbody=`
      <h1>OTP Verification</h1>
         Dear <p class='text-red-600 font-bold'> ${name},</p>
@@ -131,5 +132,48 @@ router.put("/update-type", UserAuth, async (req, res) => {
     res.status(500).send({ errors: error });
   }
 });
+
+router.get('/getdata',async(req,res)=>{
+  try {
+    const users = await User.find();
+    res.json(users);
+} catch (error) {
+    res.status(500).json({ error: 'Failed to fetch users' });
+}
+})
+
+router.put('/update/:userId',async(req,res)=>{
+  try {
+    const { userId } = req.params;
+    const updatedData = req.body;
+  console.log(userId)
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true });
+    
+    if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json(updatedUser);
+} catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+}
+})
+
+router.delete('/delete/:userId',async(req,res)=>{
+  try {
+    const { userId } = req.params;
+
+    const deletedUser = await User.findByIdAndDelete(userId);
+    if (!deletedUser) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ message: 'User deleted successfully' });
+} catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+}
+})
 
 export default router;

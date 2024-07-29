@@ -40,10 +40,11 @@ const MedicineSearch = () => {
   };
 
   return (
-    <>
-    <img className="" src=""/>
+    <div className="bg-gray-100 w-full h-full">
+    
+    <div className="py-10"></div>
       <div className="p-6 max-w-3xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6 text-center">Medicine Search</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center text-cyan-700">Medicine Search</h1>
 
         <input
           type="text"
@@ -77,7 +78,7 @@ const MedicineSearch = () => {
         </div>
         {/* Medicine Details Card */}
         {selectedMedicine && (
-          <div className="bg-white shadow-lg shadow-gray-300 rounded-lg p-6 ">
+          <div className="bg-white shadow-lg shadow-gray-300 rounded-lg p-6 mt-5">
             <h2 className="text-xl font-bold mb-4 text-center text-cyan-900">
               Medicine Details
             </h2>
@@ -123,7 +124,7 @@ const MedicineSearch = () => {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -19,6 +19,10 @@ const UserSchema = new Schema({
   otp:{
     type:String
   },
+  role:{
+    type:String,
+    default:'patient'
+  },
   date: {
     type: Date,
     default: Date.now(),

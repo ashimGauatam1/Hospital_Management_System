@@ -17,12 +17,14 @@ router.post('/register', UserAuth, async (req, res) => {
     problem,
     user: req.user.id
   });
+  console.log(doctor)
   const htmlbody =
 `  <h1>Appointment Confirmation</h1>
       <p>Dear ${name}
       <p>Thank you for scheduling an appointment with us. We are pleased to confirm your appointment as follows:</p>
       <p><strong>Date:</strong> ${date}</p>
       <p><strong>Time:</strong> ${time}</p>
+      <p><strong>Docotor:</strong> ${doctor}</p>
       <p><strong>Location:</strong> On site </p>
       <p>If you have any questions or need to reschedule, please do not hesitate to contact us.</p>
       <a href=${"http://localhost:5173/contact"} class="button">Contact Us</a>
@@ -46,5 +48,16 @@ router.get('/getdata', UserAuth, async (req, res) => {
   const data = await Appoint.find({ user: user });
   res.send(data);
 });
+
+router.get('/api/appointments/doctor/:doctorName', async (req, res) => {
+  const { doctorName } = req.params;
+  try {
+    const appointments = await Appointment.find({ doctor: doctorName });
+    res.json(appointments);
+  } catch (error) {
+    res.status(500).send('Server error');
+  }
+});
+
 
 export default router;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import { Route, Routes, BrowserRouter, useLocation } from 'react-router-dom';
 import Home from './Routes/Home';
 import Signup from './Routes/Signup';
 import Navbar from './Components/Navbar';
@@ -12,8 +12,14 @@ import Payment from './Components/Checkoutform';
 import Login from './Routes/Login';
 import Otp_verify from './Routes/Otp_verify';
 import MedicineSearch from './Routes/DrugInfo';
+import Staffs from './Routes/Staffs';
+import Admin from './Routes/Special_Routes/Admin';
+import DoctorPage from './Routes/Special_Routes/Doctorpage';
 
 function App() {
+  const location = useLocation();
+  const showNavbar = location.pathname !== '/admin';
+
   const [authToken, setAuthToken] = useState(null);
   const [userType,SetuserType]=useState("");
   useEffect(() => {
@@ -47,12 +53,10 @@ function App() {
   };
   const isAuthenticated = !!authToken;
   const ismember=!!userType;
-console.log(userType);
-console.log(authToken)
-  return (
-    <BrowserRouter>
-    <Navbar isAuthenticated={isAuthenticated}  handleLogout={handleLogout}/>
-      <Routes>
+ return (
+    <div>
+  {showNavbar && <Navbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />}
+  <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/register' element={<Signup />} />
         <Route path='/membership' element={<Membership />}/>
@@ -64,9 +68,19 @@ console.log(authToken)
         <Route element={<Login handleLogout={handleLogout}/>}/>
         <Route path='/otpverification' element={<Otp_verify isAuthenticated={isAuthenticated}/>}/>
         <Route path='/medicineinfo' element={<MedicineSearch/>}/>
+        <Route path='/admin' element={<Admin/>}/>
+        <Route path='/staffs' element={<Staffs/>}/>
+        <Route path='/doctorpage' element={<DoctorPage/>}/>
       </Routes>
-    </BrowserRouter>
+    </div>
   );
 }
 
-export default App;
+
+const AppWrapper = () => (
+  <BrowserRouter>
+      <App />
+  </BrowserRouter>
+);
+
+export default AppWrapper;
