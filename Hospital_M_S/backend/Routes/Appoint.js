@@ -40,6 +40,15 @@ router.post('/register', UserAuth, async (req, res) => {
   res.send(book);
 });
 
+router.get('/getdata', UserAuth, async (req, res) => {
+  const user = req.user.id;
+  if (!user) {
+    return res.status(401).send('Unauthorized');
+  }
+  const data = await Appoint.find({ user: user });
+  res.send(data);
+});
+
 
 
 export default router;
