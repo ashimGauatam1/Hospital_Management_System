@@ -49,15 +49,6 @@ router.get('/getdata', UserAuth, async (req, res) => {
   res.send(data);
 });
 
-router.get('/api/appointments/doctor/:doctorName', async (req, res) => {
-  const { doctorName } = req.params;
-  try {
-    const appointments = await Appointment.find({ doctor: doctorName });
-    res.json(appointments);
-  } catch (error) {
-    res.status(500).send('Server error');
-  }
-});
 
 
 export default router;
