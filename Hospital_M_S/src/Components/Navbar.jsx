@@ -19,6 +19,7 @@ const Navbar = ({ isAuthenticated, handleLogout }) => {
               <span className="ml-3 text-xl">City Hospital</span>
             </Link>
             <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
+            <Link to="/medicineinfo" className="mr-5 hover:text-gray-900">Search Medicines</Link>
               <Link to="/appointment" className="mr-5 hover:text-gray-900">Book Appointment</Link>
               <Link to="/membership" className="mr-5 hover:text-gray-900">Memberships</Link>
               {

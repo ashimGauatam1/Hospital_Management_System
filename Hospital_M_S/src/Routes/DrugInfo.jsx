@@ -1,33 +1,29 @@
-// src/MedicineSearch.js
-
-import React, { useState, useEffect } from 'react';
-import { fetchMockMedicines } from '../assets/objects/Medicine';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const MedicineSearch = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [medicines, setMedicines] = useState([]);
   const [selectedMedicine, setSelectedMedicine] = useState(null);
+  const [showRecommendations, setShowRecommendations] = useState(false);
 
   useEffect(() => {
     const fetchMedicines = async () => {
-      if (searchTerm.length < 2) {
-        setSearchResults([]);
-        return;
-      }
-
-      setLoading(true);
-      setError(null);
-
-      try {
-        const medicines = await fetchMockMedicines(searchTerm);
-        setSearchResults(medicines);
-      } catch (err) {
-        setError('An error occurred while fetching data');
-        setSearchResults([]);
-      } finally {
-        setLoading(false);
+      if (searchTerm.length > 0) {
+        try {
+          const response = await axios.get(
+            `https://api.fda.gov/drug/label.json?search=openfda.brand_name:${searchTerm}*&limit=5`
+          );
+          setMedicines(response.data.results || []);
+          setShowRecommendations(true);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          setMedicines([]);
+          setShowRecommendations(false);
+        }
+      } else {
+        setMedicines([]);
+        setShowRecommendations(false);
       }
     };
 
@@ -38,66 +34,96 @@ const MedicineSearch = () => {
     return () => clearTimeout(debounce);
   }, [searchTerm]);
 
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
   const handleMedicineClick = (medicine) => {
     setSelectedMedicine(medicine);
+    setShowRecommendations(false);
   };
 
   return (
-    <div className="container mx-auto mt-10 p-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">Medicine Search</h2>
-          <input
-            type="text"
-            placeholder="Search for medicines..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {loading && <p className="mt-4 text-gray-600">Loading...</p>}
-          {error && <p className="mt-4 text-red-500">{error}</p>}
-          {searchTerm.length >= 2 && !loading && !error && (
-            <ul className="mt-4 space-y-2">
-              {searchResults.length > 0 ? (
-                searchResults.map((medicine) => (
+    <>
+    <img className="" src=""/>
+      <div className="p-6 max-w-3xl mx-auto">
+        <h1 className="text-2xl font-bold mb-6 text-center">Medicine Search</h1>
+
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search for a medicine..."
+          className="w-full p-3 border border-gray-300 rounded-md mb-6 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Recommendations Card */}
+          {showRecommendations && medicines.length > 0 && (
+            <div className="bg-white shadow-gray-400 shadow-lg rounded-lg p-6">
+              <h2 className="text-xl mb-4 text-center text-cyan-700 font-bold">
+                Recommendations
+              </h2>
+              <ul className="divide-y divide-blue-300">
+                {medicines.map((medicine, index) => (
                   <li
-                    key={medicine.id}
+                    key={index}
                     onClick={() => handleMedicineClick(medicine)}
-                    className="p-3 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors duration-200 cursor-pointer"
+                    className="cursor-pointer py-3 hover:bg-cyan-50 transition-colors duration-200"
                   >
-                    {medicine.name}
+                    {medicine.openfda?.brand_name[0] || "No name available"}
                   </li>
-                ))
-              ) : (
-                <li className="text-gray-500">No results found</li>
-              )}
-            </ul>
+                ))}
+              </ul>
+            </div>
           )}
+          
         </div>
-        
+        {/* Medicine Details Card */}
         {selectedMedicine && (
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">{selectedMedicine.name}</h2>
-            <div className="grid grid-cols-1 gap-4">
-              <img 
-                src={selectedMedicine.image} 
-                alt={selectedMedicine.name}
-                className="w-full h-auto rounded-md mb-4"
-              />
-              <div>
-                <p><strong>Uses:</strong> {selectedMedicine.uses}</p>
-                <p><strong>Side Effects:</strong> {selectedMedicine.sideEffects}</p>
-                <p><strong>Price:</strong> {selectedMedicine.price}</p>
-              </div>
+          <div className="bg-white shadow-lg shadow-gray-300 rounded-lg p-6 ">
+            <h2 className="text-xl font-bold mb-4 text-center text-cyan-900">
+              Medicine Details
+            </h2>
+            <div className="space-y-2">
+              <p>
+                <strong>Name:</strong>{" "}
+                {selectedMedicine.openfda?.brand_name[0] || "No name available"}
+              </p>
+              <p>
+                <strong>Manufacturer:</strong>{" "}
+                {selectedMedicine.openfda?.manufacturer_name?.[0] ||
+                  "No manufacturer information"}
+              </p>
+              <p>
+                <strong>Purpose:</strong>{" "}
+                {selectedMedicine.indications_and_usage?.[0] ||
+                  "No purpose information"}
+              </p>
+              <p>
+                <strong>Side Effects:</strong>{" "}
+                {selectedMedicine.warnings_and_cautions?.[0] ||
+                  "No side effects information"}
+              </p>
+              <p>
+                <strong>Active Ingredients:</strong>{" "}
+                {selectedMedicine.active_ingredients?.map(
+                  (ingredient, index) => (
+                    <span key={index}>
+                      {ingredient.name || "No name"}
+                      {index < selectedMedicine.active_ingredients.length - 1
+                        ? ", "
+                        : ""}
+                    </span>
+                  )
+                ) || "No active ingredients information"}
+              </p>
+              <p>
+                <strong>Drug Class:</strong>{" "}
+                {selectedMedicine.openfda?.substance_name?.join(", ") ||
+                  "No drug class information"}
+              </p>
             </div>
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
 
