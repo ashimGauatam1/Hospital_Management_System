@@ -1,6 +1,6 @@
 const doctors = [
-    { id: 1, name: 'Dr. Ramesh Shrestha', specialty: 'Cardiology' },
-    { id: 2, name: 'Dr. Sita Gurung', specialty: 'Dermatology' },
+    { id: '66a846999dc39bb5a6973580', name: 'Dr. Ramesh Shrestha', specialty: 'Cardiology' },
+    { id: '66a846f7cda741e67b758175', name: 'Dr. Sita Gurung', specialty: 'Dermatology' },
     { id: 3, name: 'Dr. Sunil Thapa', specialty: 'Neurology' },
     { id: 4, name: 'Dr. Anjali Sharma', specialty: 'Pediatrics' },
     { id: 5, name: 'Dr. Prakash Adhikari', specialty: 'Orthopedics' },

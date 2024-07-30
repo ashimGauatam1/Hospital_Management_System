@@ -4,6 +4,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import UserAuth from "../middleware/UserFetch.js";
 import sendEmail from "../middleware/Gmail.js";
+import Doctor from "../Schemas/Doctors.js";
+import DocotorAuth from "../middleware/Doctormiddleware.js";
+import Appoint from "../Schemas/Appointment_form.js";
 
 const router = express.Router();
 
@@ -175,5 +178,63 @@ router.delete('/delete/:userId',async(req,res)=>{
     res.status(500).json({ message: 'Internal server error' });
 }
 })
+
+
+//doctors
+router.post("/registerdoctor", async (req, res) => {
+  try {
+    const { name, DoctorsID, password,specialty } = req.body;
+    const existingUser = await Doctor.findOne({ DoctorsID: req.body.DoctorsID });
+
+    if (existingUser) {
+      return res.status(404).json("Doctor Already Exists");
+    }
+    const salt = await bcrypt.genSalt(10);
+    const newPass = await bcrypt.hash(password, salt);
+
+    const newdoctor=new Doctor({
+      name,
+      DoctorsID,
+      password:newPass,
+      specialty
+    })
+    await newdoctor.save();
+    res.json(newdoctor)
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+}})
+
+router.post('/doctorlogin',async(req,res)=>{
+  const {DoctorsID,password}=req.body;
+  const doctorid=await Doctor.findOne({DoctorsID:DoctorsID})
+  if(!doctorid){
+    return res.status(404).json("Invalid credentials");
+  }
+  const matchpass=await bcrypt.compare(password,doctorid.password);
+  if(!matchpass){
+    return res.status(404).json("Invalid credentials");
+  }
+  const data = {
+    id: doctorid._id,
+  };
+
+  const token = jwt.sign(data, process.env.SCRT_KEY, {
+    expiresIn: "1d",
+  });
+
+  console.log(token);
+  res.json({ token, name: doctorid.name });
+ 
+})
+
+router.get('/patientlist',DocotorAuth,async(req,res)=>{
+  const doctor = req.doctor.id;
+  if (!doctor) {
+    return res.status(401).send('Unauthorized');
+  }
+  const data = await Appoint.find({ doctorId: doctor });
+ 
+  res.send(data);})
 
 export default router;

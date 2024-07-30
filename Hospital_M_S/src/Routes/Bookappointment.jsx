@@ -6,7 +6,6 @@ import doctors from "../assets/objects/Doctor";
 import Alert from "../Components/Alert";
 
 const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
- 
   const [type, SetType] = useState('');
   const [message, setMessage] = useState('');
   const [alerts, setAlert] = useState(false);
@@ -15,16 +14,20 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
     name: "",
     email: "",
     phone: "",
-    doctor: "",
+    doctorName: "",
+    doctorId: "", 
     date: "",
     time: "",
     problem: "",
   });
 
-  // Function to select a random doctor
   const getRandomDoctor = () => {
     const randomIndex = Math.floor(Math.random() * doctors.length);
-    return doctors[randomIndex].name;
+    const randomDoctor = doctors[randomIndex];
+    return {
+      name: randomDoctor.name,
+      id: randomDoctor.id,
+    };
   };
 
   const fetchUser = async () => {
@@ -33,7 +36,8 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
     try {
       const appointmentData = {
         ...data,
-        doctor: data.doctor || getRandomDoctor(),
+        doctorName: data.doctorName || getRandomDoctor().name,
+        doctorId: data.doctorId || getRandomDoctor().id, 
       };
 
       const response = await axios.post(
@@ -66,10 +70,20 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setData({
-      ...data,
-      [name]: value,
-    });
+
+    if (name === "doctor") {
+      const selectedDoctor = doctors.find(doctor => doctor.name === value);
+      setData({
+        ...data,
+        doctorName: selectedDoctor.name,
+        doctorId: selectedDoctor.id, 
+      });
+    } else {
+      setData({
+        ...data,
+        [name]: value,
+      });
+    }
   };
 
   useEffect(() => {
@@ -152,25 +166,13 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     Please make sure that the details are correct before booking an appointment
                   </li>
                   <li className="text-sm text-gray-700 font-bold">
-                    Your appointment will be confirmed within 15 minutes
+                    Booking will be considered as confirmed and you will be notified further on the given contact details
                   </li>
                   <li className="text-sm text-gray-700 font-bold">
-                    Make sure that the appointment time will vary
-                  </li>
-                  <li className="text-sm text-gray-700 font-bold">
-                    You will be informed about your appointment time by phone and mail, so please be on time
-                  </li>
-                  <li className="text-sm text-gray-700 font-bold">
-                    Booking an appointment is free, but you will be charged for the services
-                  </li>
-                  <li className="text-sm text-gray-700 font-bold">
-                    If you cancel the appointment, you will not be charged, but make sure to inform us at least 2 hours before.
+                    You will be able to see the appointments on the doctor’s profile
                   </li>
                 </ul>
                 <div>
-                  <h4 className="text-lg text-black mb-2 font-bold">
-                    Enter Your Details Carefully
-                  </h4>
                   <label
                     htmlFor="name"
                     className="block text-sm font-medium text-gray-700"
@@ -179,33 +181,36 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                   </label>
                   <input
                     type="text"
-                    name="name"
                     id="name"
-                    className="mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-cyan-600 focus:ring-indigo-500 sm:text-sm"
+                    name="name"
+                    value={data.name}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-600 focus:ring-indigo-500 sm:text-sm"
                     placeholder="Enter Your Full Name"
                     required
-                    maxLength={20}
+                    maxLength={50}
                     onChange={handleChange}
                   />
                 </div>
                 <div>
                   <label
-                    htmlFor="phone"
+                    htmlFor="email"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Phone Number
                   </label>
                   <input
                     type="text"
-                    name="phone"
                     id="phone"
-                    className="mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-cyan-600 focus:ring-indigo-500 sm:text-sm"
-                    placeholder="Enter Your Phone Number"
+                    name="phone"
+                    value={data.phone}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-600 focus:ring-indigo-500 sm:text-sm"
+                    placeholder="Enter Your phone number here"
                     required
                     maxLength={10}
                     onChange={handleChange}
                   />
                 </div>
+                
                 <div>
                   <label
                     htmlFor="email"
@@ -215,9 +220,10 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                   </label>
                   <input
                     type="email"
-                    name="email"
                     id="email"
-                    className="mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    name="email"
+                    value={data.email}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-600 focus:ring-indigo-500 sm:text-sm"
                     placeholder="Enter Your email here"
                     required
                     maxLength={50}
@@ -235,7 +241,7 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     <select
                       id="doctor"
                       name="doctor"
-                      value={data.doctor}
+                      value={data.doctorName} 
                       onChange={handleChange}
                       className="block w-full border border-gray-300 rounded-md p-2 mb-4 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
                     >
@@ -261,9 +267,9 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     type="date"
                     name="date"
                     id="date"
-                    onChange={handleChange}
+                    className="mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-cyan-600 focus:ring-indigo-500 sm:text-sm"
                     required
-                    className="mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    onChange={handleChange}
                   />
                 </div>
                 <div>
@@ -277,9 +283,9 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     type="time"
                     name="time"
                     id="time"
-                    onChange={handleChange}
+                    className="mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-cyan-600 focus:ring-indigo-500 sm:text-sm"
                     required
-                    className="mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    onChange={handleChange}
                   />
                 </div>
                 <div>
@@ -287,30 +293,23 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     htmlFor="problem"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Type Your Problem Here
+                    Problem Description
                   </label>
-                  <input
+                  <textarea
                     name="problem"
-                    type="text"
                     id="problem"
-                    placeholder="Type Your Problem Here"
+                    className="mt-1 block w-full h-24 rounded-md border-gray-300 shadow-sm focus:border-cyan-600 focus:ring-indigo-500 sm:text-sm"
+                    placeholder="Describe your problem here"
                     required
                     onChange={handleChange}
-                    className="mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  />
+                  ></textarea>
                 </div>
-                <div>
-                  <button
-                    type="submit"
-                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-700 hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-800"
-                  >
-                    {loading ? (
-                      <span>Loading...</span>
-                    ) : (
-                      'Book Appointment'
-                    )}
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  className="w-full py-2 px-4 bg-cyan-600 text-white font-semibold rounded-lg shadow-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
+                >
+                  {loading ? "Booking..." : "Book Appointment"}
+                </button>
               </form>
             </div>
           </div>
