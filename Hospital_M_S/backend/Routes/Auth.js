@@ -180,7 +180,7 @@ router.delete('/delete/:userId',async(req,res)=>{
 })
 
 
-//doctors
+//doctors register
 router.post("/registerdoctor", async (req, res) => {
   try {
     const { name, DoctorsID, password,specialty } = req.body;
@@ -204,7 +204,7 @@ router.post("/registerdoctor", async (req, res) => {
     console.error('Error deleting user:', error);
     res.status(500).json({ message: 'Internal server error' });
 }})
-
+// doctor login
 router.post('/doctorlogin',async(req,res)=>{
   const {DoctorsID,password}=req.body;
   const doctorid=await Doctor.findOne({DoctorsID:DoctorsID})
@@ -228,6 +228,7 @@ router.post('/doctorlogin',async(req,res)=>{
  
 })
 
+// patient list
 router.get('/patientlist',DocotorAuth,async(req,res)=>{
   const doctor = req.doctor.id;
   if (!doctor) {

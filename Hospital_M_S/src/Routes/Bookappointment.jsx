@@ -6,8 +6,8 @@ import doctors from "../assets/objects/Doctor";
 import Alert from "../Components/Alert";
 
 const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
-  const [type, SetType] = useState('');
-  const [message, setMessage] = useState('');
+  const [type, SetType] = useState("");
+  const [message, setMessage] = useState("");
   const [alerts, setAlert] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
@@ -15,9 +15,9 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
     email: "",
     phone: "",
     doctorName: "",
-    doctorId: "", 
+    doctorId: "",
     date: "",
-    age:"",
+    age: "",
     time: "",
     problem: "",
   });
@@ -38,7 +38,7 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
       const appointmentData = {
         ...data,
         doctorName: data.doctorName || getRandomDoctor().name,
-        doctorId: data.doctorId || getRandomDoctor().id, 
+        doctorId: data.doctorId || getRandomDoctor().id,
       };
 
       const response = await axios.post(
@@ -51,17 +51,19 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
 
       if (response.status === 200) {
         setData(response.data);
-        SetType('success');
-        setMessage('Appointment booked successfully. You will be informed further through mail and phone.');
+        SetType("success");
+        setMessage(
+          "Appointment booked successfully. You will be informed further through mail and phone."
+        );
         setAlert(true);
       } else {
-        SetType('danger');
+        SetType("danger");
         setMessage("Something went wrong.");
         setAlert(true);
       }
     } catch (error) {
       console.error(error);
-      SetType('danger');
+      SetType("danger");
       setMessage("An error occurred while booking the appointment.");
       setAlert(true);
     } finally {
@@ -73,11 +75,11 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
     const { name, value } = e.target;
 
     if (name === "doctor") {
-      const selectedDoctor = doctors.find(doctor => doctor.name === value);
+      const selectedDoctor = doctors.find((doctor) => doctor.name === value);
       setData({
         ...data,
         doctorName: selectedDoctor.name,
-        doctorId: selectedDoctor.id, 
+        doctorId: selectedDoctor.id,
       });
     } else {
       setData({
@@ -105,18 +107,24 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
         <>
           {alerts && (
             <div className="ml-5 py-20 -mb-20">
-              <Alert type={type} message={message} onClose={() => setAlert(false)} />
+              <Alert
+                type={type}
+                message={message}
+                onClose={() => setAlert(false)}
+              />
             </div>
           )}
           <div className="py-20 flex justify-center items-center min-h-screen">
             <img
-              data-aos='zoom-in'
+              data-aos="zoom-in"
               className="w-50 h-50"
               src="https://img.freepik.com/free-vector/403-error-forbidden-with-police-concept-illustration_114360-1904.jpg?t=st=1722009703~exp=1722013303~hmac=f8743ec79b03629cd8f7be7a5632551c77d7ed3ac0ce8847be37ac115ee55a67&w=360"
               alt="Error 403 Forbidden"
             />
           </div>
-          <h1 className="-mt-20 text-center font-serif font-extrabold text-cyan-800">PLEASE LOGIN/SIGN UP FIRST</h1>
+          <h1 className="-mt-20 text-center font-serif font-extrabold text-cyan-800">
+            PLEASE LOGIN/SIGN UP FIRST
+          </h1>
         </>
       ) : (
         <>
@@ -151,7 +159,8 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
               data-aos="fade-left"
               className="text-center italic -mt-8 mb-5 justify-around text-gray-500"
             >
-              If you have taken any memberships, you can select your desired doctor and book an appointment
+              If you have taken any memberships, you can select your desired
+              doctor and book an appointment
             </div>
             <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
               <form
@@ -164,13 +173,16 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                 </div>
                 <ul className="list-disc list-inside space-y-4">
                   <li className="text-sm text-gray-700 font-bold">
-                    Please make sure that the details are correct before booking an appointment
+                    Please make sure that the details are correct before booking
+                    an appointment
                   </li>
                   <li className="text-sm text-gray-700 font-bold">
-                    Booking will be considered as confirmed and you will be notified further on the given contact details
+                    Booking will be considered as confirmed and you will be
+                    notified further on the given contact details
                   </li>
                   <li className="text-sm text-gray-700 font-bold">
-                    You will be able to see the appointments on the doctor’s profile
+                    You will be able to see the appointments on the doctor’s
+                    profile
                   </li>
                 </ul>
                 <div>
@@ -211,7 +223,7 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     onChange={handleChange}
                   />
                 </div>
-                
+
                 <div>
                   <label
                     htmlFor="email"
@@ -231,7 +243,7 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     onChange={handleChange}
                   />
                 </div>
-                
+
                 <div>
                   <label
                     htmlFor="email"
@@ -262,7 +274,7 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     <select
                       id="doctor"
                       name="doctor"
-                      value={data.doctorName} 
+                      value={data.doctorName}
                       onChange={handleChange}
                       className="block w-full border border-gray-300 rounded-md p-2 mb-4 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
                     >
