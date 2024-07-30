@@ -20,7 +20,7 @@ import Patient_info from './Routes/Special_Routes/Patient_info';
 
 function App() {
   const location = useLocation();
-  const showNavbar = location.pathname !== '/admin'&& location.pathname !== '/doctorpage'&& location.pathname !== '/doctorlogin';
+  const showNavbar = location.pathname !== '/admin'&& location.pathname !== '/doctorpage'&& location.pathname !== '/doctorlogin' &&!location.pathname.startsWith('/patient_info/');
 
   const [authToken, setAuthToken] = useState(null);
   const [userType,SetuserType]=useState("");
@@ -52,6 +52,7 @@ function App() {
     localStorage.removeItem('token');
     localStorage.removeItem('tokenTimestamp');
     localStorage.removeItem('user_type');
+    localStorage.removeItem('doctor-token');
   };
   const isAuthenticated = !!authToken;
   const ismember=!!userType;
@@ -72,7 +73,7 @@ function App() {
         <Route path='/medicineinfo' element={<MedicineSearch/>}/>
         <Route path='/admin' element={<Admin/>}/>
         <Route path='/staffs' element={<Staffs/>}/>
-        <Route path='/doctorpage' element={<DoctorPage/>}/>
+        <Route path='/doctorpage' element={<DoctorPage handleLogout={handleLogout} />}/>
         <Route path='/doctorlogin' element={<DoctorLogin/>}/>
         <Route path='/patient_info/:id' element={<Patient_info/>}/>
       </Routes>

@@ -66,7 +66,7 @@ const Patient_info = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-cyan-100 to-blue-100 p-10 py-24">
+    <div className="min-h-screen bg-gradient-to-r from-cyan-100 to-blue-100 p-10 py-10">
       <h1 className="text-4xl font-extrabold text-gray-800 mb-8 text-center">Patient Details</h1>
       
       {patient ? (

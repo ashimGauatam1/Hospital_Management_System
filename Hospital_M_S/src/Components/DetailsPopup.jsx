@@ -2,7 +2,7 @@ import React from 'react';
 
 const DetailsPopup = ({ isOpen, onClose, details }) => {
   if (!isOpen) return null;
-a
+
   const hasDetails = Array.isArray(details) && details.length > 0;
 
   return (

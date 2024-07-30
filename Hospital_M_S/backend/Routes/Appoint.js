@@ -5,7 +5,7 @@ import sendEmail from '../middleware/Gmail.js';
 const router = express.Router();
 
 router.post('/register', UserAuth, async (req, res) => {
-  const { name, phone, email, date, time, problem, doctorName,doctorId } = req.body;
+  const { name, phone, email, date, time, problem, doctorName,doctorId ,age} = req.body;
   const book = new Appoint({
     name,
     phone,
@@ -13,6 +13,7 @@ router.post('/register', UserAuth, async (req, res) => {
     doctorId,
     doctorName,
     date,
+    age,
     time,
     problem,
     user: req.user.id

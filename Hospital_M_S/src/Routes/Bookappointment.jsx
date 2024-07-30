@@ -17,6 +17,7 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
     doctorName: "",
     doctorId: "", 
     date: "",
+    age:"",
     time: "",
     problem: "",
   });
@@ -191,6 +192,26 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     onChange={handleChange}
                   />
                 </div>
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Age
+                  </label>
+                  <input
+                    type="number"
+                    id="age"
+                    name="age"
+                    value={data.age}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-600 focus:ring-indigo-500 sm:text-sm"
+                    placeholder="Enter Your age "
+                    required
+                    maxLength={2}
+                    onChange={handleChange}
+                  />
+                </div>
+                
                 <div>
                   <label
                     htmlFor="email"
