@@ -224,7 +224,7 @@ router.post('/doctorlogin',async(req,res)=>{
   });
 
   console.log(token);
-  res.json({ token, name: doctorid.name });
+  res.json({ token, name: doctorid._id });
  
 })
 

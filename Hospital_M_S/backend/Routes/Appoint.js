@@ -2,7 +2,6 @@ import express from 'express';
 import Appoint from '../Schemas/Appointment_form.js';
 import UserAuth from '../middleware/UserFetch.js';
 import sendEmail from '../middleware/Gmail.js';
-
 const router = express.Router();
 
 router.post('/register', UserAuth, async (req, res) => {
@@ -51,6 +50,63 @@ router.get('/getdata', UserAuth, async (req, res) => {
   res.send(data);
 });
 
+router.post('/patient/:id', async (req, res) => {
+  const { id } = req.params;
+  const { response, medicine } = req.body;
 
+  try {
+    const appointment = await Appoint.findById(id);
+    if (!appointment) {
+      return res.status(404).json({ message: 'Appointment not found' });
+    }
+
+    appointment.response = response;
+    appointment.medicine = medicine;
+    await appointment.save();
+
+    res.json({appointment});
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+router.get('/patient/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const appointment = await Appoint.findById(id);
+    if (!appointment) {
+      return res.status(404).json({ message: 'Appointment not found' });
+    }
+    res.json({appointment});
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Server error' });
+  }
+})
+
+router.delete('/patient/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await Appoint.findByIdAndUpdate(
+      id,
+      { $unset: { doctorId: "" } },
+      { new: true }
+    );
+        if (!result) {
+      return res.status(404).json({ message: 'Patient not found' });
+    }
+    res.status(200).json({result});
+    console.log("deleted")
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting patient', error });
+  }
+});
+
+router.get('/history/:id',async(req,res)=>{
+  const {id}=req.params;
+  const user=await Appoint.find({user:id});
+  res.json(user)
+})
 
 export default router;

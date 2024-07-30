@@ -15,10 +15,12 @@ import MedicineSearch from './Routes/DrugInfo';
 import Staffs from './Routes/Staffs';
 import Admin from './Routes/Special_Routes/Admin';
 import DoctorPage from './Routes/Special_Routes/Doctorpage';
+import DoctorLogin from './Routes/Special_Routes/Doctor_login';
+import Patient_info from './Routes/Special_Routes/Patient_info';
 
 function App() {
   const location = useLocation();
-  const showNavbar = location.pathname !== '/admin';
+  const showNavbar = location.pathname !== '/admin'&& location.pathname !== '/doctorpage'&& location.pathname !== '/doctorlogin';
 
   const [authToken, setAuthToken] = useState(null);
   const [userType,SetuserType]=useState("");
@@ -71,6 +73,8 @@ function App() {
         <Route path='/admin' element={<Admin/>}/>
         <Route path='/staffs' element={<Staffs/>}/>
         <Route path='/doctorpage' element={<DoctorPage/>}/>
+        <Route path='/doctorlogin' element={<DoctorLogin/>}/>
+        <Route path='/patient_info/:id' element={<Patient_info/>}/>
       </Routes>
     </div>
   );

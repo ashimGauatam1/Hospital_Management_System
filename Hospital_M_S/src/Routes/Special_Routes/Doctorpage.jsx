@@ -1,56 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const DoctorPage = () => {
-  const { doctorName } = useParams();
-  const [doctor, setDoctor] = useState(null);
   const [appointments, setAppointments] = useState([]);
-
+  const authToken = localStorage.getItem('doctor-token');
   useEffect(() => {
-    const fetchDoctor = async () => {
+    const fetchAppointments = async () => {
       try {
-        // Fetch doctor's details
-        const doctorResponse = await axios.get(`http://localhost:8080/api/doctors/${doctorName}`);
-        setDoctor(doctorResponse.data);
-
-        // Fetch appointments for the doctor
-        const appointmentsResponse = await axios.get(`http://localhost:8080/api/appointments/doctor/${doctorName}`);
-        setAppointments(appointmentsResponse.data);
+        const response = await axios.get('http://localhost:8080/api/auth/patientlist', {
+          headers: { 'auth-token': authToken },
+        });
+        setAppointments(response.data);
       } catch (error) {
-        console.error("Error fetching doctor's data or appointments:", error);
+        console.error('Error fetching appointments', error);
       }
     };
 
-    fetchDoctor();
-  }, [doctorName]);
-
-  if (!doctor) {
-    return <div>Loading...</div>;
-  }
+    fetchAppointments();
+  }, [authToken]);
 
   return (
-    <div>
-      <h1>{doctor.name}</h1>
-      <p><strong>Specialty:</strong> {doctor.specialty}</p>
-      <p><strong>Contact:</strong> {doctor.contact}</p>
-
-      <h2>Appointments</h2>
-      {appointments.length > 0 ? (
-        <ul>
-          {appointments.map((appointment) => (
-            <li key={appointment._id}>
-              <strong>Name:</strong> {appointment.name}<br />
-              <strong>Email:</strong> {appointment.email}<br />
-              <strong>Phone:</strong> {appointment.phone}<br />
-              <strong>Date:</strong> {appointment.date}<br />
-              <strong>Time:</strong> {appointment.time}<br />
-              <strong>Problem:</strong> {appointment.problem}<br />
-            </li>
-          ))}
-        </ul>
+    <div className="min-h-screen bg-cyan-50 p-8">
+      <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center">Patient Appointments</h1>
+      {appointments.length === 0 ? (
+        <div className="text-center text-xl text-gray-700 mt-10">
+          <p className="animate-pulse">There are no appointments at the moment.</p>
+        </div>
       ) : (
-        <p>No appointments found for this doctor.</p>
+        <div className="space-y-6 flex flex-col items-center">
+          {appointments.map((patient) => (
+            <div
+              key={patient._id}
+              className="bg-white border border-gray-200 rounded-lg shadow-lg p-6 w-full max-w-3xl flex flex-col space-y-4 transition-transform transform hover:scale-105 hover:shadow-2xl"
+            >
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                <div className="flex-1">
+                  <h2 className="text-2xl font-semibold text-gray-800 mb-2">{patient.name}</h2>
+                  <p className="text-gray-600 text-md mb-1">Email: {patient.email}</p>
+                  <p className="text-gray-600 text-md mb-1">Date: {patient.date}</p>
+                  </div>
+                <Link
+                  to={`/patient_info/${patient._id}`}
+                  className="text-white bg-cyan-600 hover:bg-cyan-700 font-semibold px-4 py-2 rounded-md shadow-lg transition-transform transform hover:scale-105 mt-4 md:mt-0"
+                >
+                  View
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

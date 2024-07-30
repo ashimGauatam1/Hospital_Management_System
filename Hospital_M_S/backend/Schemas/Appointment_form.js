@@ -36,8 +36,13 @@ const AppSchema=new Schema({
       problem: {
         type: String,
         required: true
+      },
+      response:{
+        type:String
+      },
+      medicine:{
+        type:String
       }
-
 })
 
 const Appoint =mongoose.model('Appoint',AppSchema)
