@@ -35,7 +35,7 @@ app.post('/create-payment-intent', async (req, res) => {
       error: error.message,
     });
   }
-});
+})
 app.use(bodyParser.json());
 app.get('/', (req, res) => {
   res.send('Hello World!')
