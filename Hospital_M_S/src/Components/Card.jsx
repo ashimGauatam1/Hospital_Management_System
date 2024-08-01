@@ -30,9 +30,13 @@ const Card = ({ date, time, problem ,prescription,medicine}) => {
         </div>
         {
           medicine || prescription?
-            <button className='bg-green-400 mt-5 font-bold p-1'>Completed</button>
+          <div className='py-5'>
+            <a className='bg-green-400  font-bold p-1'>Completed</a>
+            </div>
         :
-        <div></div>
+        <div className='py-5'>
+            <a className='bg-red-400  font-bold p-1'>Pending</a>
+            </div>
         }
       </div>
     </div>
