@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-const Card = ({ date, time, problem }) => {
+const Card = ({ date, time, problem ,prescription,medicine}) => {
   return (
     <div className="max-w-sm mx-auto bg-white shadow-gray-900 rounded-lg overflow-hidden my-4  " >
       <div className="p-4">
@@ -19,7 +19,21 @@ const Card = ({ date, time, problem }) => {
             <span className="text-cyan-800 font-bold">Problem:</span>
             <p className="text-gray-900 font-bold mt-1">{problem}</p>
           </div>
+          <div className="mt-2">
+            <span className="text-cyan-800 font-bold">Prescription:</span>
+            <p className="text-gray-900 font-bold mt-1">{prescription}</p>
+          </div>
+          <div className="mt-2">
+            <span className="text-cyan-800 font-bold">Medicine:</span>
+            <p className="text-gray-900 font-bold mt-1">{medicine}</p>
+          </div>
         </div>
+        {
+          medicine || prescription?
+            <button className='bg-green-400 mt-5 font-bold p-1'>Completed</button>
+        :
+        <div></div>
+        }
       </div>
     </div>
   );

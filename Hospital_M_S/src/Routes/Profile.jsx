@@ -112,6 +112,8 @@ const Profile = ({ authToken, isAuthenticated }) => {
                       date={appointment.date}
                       time={appointment.time}
                       problem={appointment.problem}
+                      prescription={appointment.prescription}
+                      medicine={appointment.medicine}
                     />
                   ))}
                 </div>
