@@ -1,47 +1,32 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cros from 'cors';
-import router1  from './Routes/Auth.js';
-import router2 from './Routes/Appoint.js';
-import Stripe  from 'stripe';
+import express from "express";
+import { config } from "dotenv";
+import connectDB from "./db/db.js";
+import userRouter from './routes/user.auth.route.js'
+import doctorRouter from './routes/doctor.route.js'
+import appointRouter from './routes/appoint.route.js'
+import cookieParser from "cookie-parser";
+import cros from 'cros'
 
-dotenv.config();
+config()
+const app=express()
+app.use(express.json())
+const port=process.env.PORT
+connectDB();
+app.use(cookieParser())
 
-import ConnectToDB from './db.js';
-import bodyParser from 'body-parser';
-const app = express();
-ConnectToDB();
+app.use(cros({
+    origin:"http://localhost:5173",
+    credentials:true
+}
+))
 
-const port = process.env.PORT || 8081;
-app.use(cros());
-app.use(express.json());
-const stripe = new Stripe(process.env.PAY_SCRT);
-app.use('/api/auth',router1 );
-app.use('/api/appoint',router2 );
-app.post('/create-payment-intent', async (req, res) => {
-  const { amount } = req.body;
-
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount,
-      currency: 'usd',
-    });
-
-    res.send({
-      clientSecret: paymentIntent.client_secret,
-    });
-  } catch (error) {
-    res.status(400).send({
-      error: error.message,
-    });
-  }
-})
-app.use(bodyParser.json());
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+app.use('/api/v1/users',userRouter)
+app.use('/api/v1/doctor',doctorRouter)
+app.use('/api/v1/appoint',appointRouter)
 
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+
+
+app.listen(port,()=>{
+    console.log(`Server is running at ${port}`);
 })

@@ -12,11 +12,12 @@ import Payment from './Components/Checkoutform';
 import Login from './Routes/Login';
 import Otp_verify from './Routes/Otp_verify';
 import MedicineSearch from './Routes/DrugInfo';
-import Staffs from './Routes/Staffs';
 import Admin from './Routes/Special_Routes/Admin';
 import DoctorPage from './Routes/Special_Routes/Doctorpage';
 import DoctorLogin from './Routes/Special_Routes/Doctor_login';
 import Patient_info from './Routes/Special_Routes/Patient_info';
+import Staff from './Routes/Special_Routes/Staff';
+import Staffs from './Routes/Staffs';
 
 function App() {
   const location = useLocation();
@@ -75,6 +76,7 @@ function App() {
         <Route path='/staffs' element={<Staffs/>}/>
         <Route path='/doctorpage' element={<DoctorPage handleLogout={handleLogout} />}/>
         <Route path='/doctorlogin' element={<DoctorLogin/>}/>
+        <Route path='/staff' element={<Staff/>} />
         <Route path='/patient_info/:id' element={<Patient_info/>}/>
       </Routes>
     </div>

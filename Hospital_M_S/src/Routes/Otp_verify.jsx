@@ -5,7 +5,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Alert from '../Components/Alert';
 
-const Otp_verify = ({isAuthenticated}) => {
+const Otp_verify = () => {
   const [type, setType] = useState('');
   const [message, setMessage] = useState('');
   const [alerts, setAlert] = useState(false);
@@ -57,7 +57,7 @@ const Otp_verify = ({isAuthenticated}) => {
  
   return (
     <>
-    {!isAuthenticated ? (
+    {isAuthenticated ? (
         <>
           {alerts && (
     <div className="ml-5  py-20  -mb-20 bg-gray-100">
