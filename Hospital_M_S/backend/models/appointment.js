@@ -17,6 +17,13 @@ const AppointSchema = new Schema({
     type: Number,
     required: [true, "Name is required"],
   },
+  phone:{
+    type:String,
+
+  },
+  email:{
+    type:String,
+  },
   isconfirm: {
     type: Boolean,
     default: false,
@@ -32,12 +39,7 @@ const AppointSchema = new Schema({
     type: String,
     required: true,
   },
-  response: {
-    type: String,
-  },
-  medicine: {
-    type: String,
-  },
+  
 });
 
 const Appoint=mongoose.model("Appoint",AppointSchema)

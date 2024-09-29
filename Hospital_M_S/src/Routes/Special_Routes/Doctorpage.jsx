@@ -8,6 +8,7 @@ const DoctorPage = ({ handleLogout }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredAppointments, setFilteredAppointments] = useState([]);
   const authToken = sessionStorage.getItem('doctor-token');
+  const doctorPhoto = sessionStorage.getItem('photo');
 
   useEffect(() => {
     if (!authToken) {
@@ -16,14 +17,13 @@ const DoctorPage = ({ handleLogout }) => {
       const fetchAppointments = async () => {
         try {
           const response = await axios.get(`http://localhost:8080/api/v1/doctor/appointment/${authToken}`);
-          console.log(response.data); 
+     
           setAppointments(response.data.data.Appointments || []); 
           setFilteredAppointments(response.data.data.Appointments || []); 
         } catch (error) {
           console.error('Error fetching appointments', error);
         }
       };
-
       fetchAppointments();
     }
   }, [authToken, navigate]);
@@ -38,7 +38,16 @@ const DoctorPage = ({ handleLogout }) => {
 
   return (
     <div className="min-h-screen bg-cyan-50 p-8 flex flex-col">
-      <div className='flex justify-end'> 
+      <div className="flex justify-between items-center mb-8">
+      <div className="flex items-center">
+  <img
+    src={doctorPhoto}
+    alt="Doctor"
+    className="h-32 w-32 rounded-full border-2 border-cyan-600 mr-4"
+  />
+  <h1 className="text-4xl font-extrabold text-gray-900">Doctor's Dashboard</h1>
+</div>
+
         <button
           className="inline-flex text-white bg-cyan-600 border-0 py-2 px-6 focus:outline-none hover:bg-cyan-800 rounded text-lg"
           onClick={handleLogout}
@@ -55,7 +64,7 @@ const DoctorPage = ({ handleLogout }) => {
           className="border border-gray-300 rounded-md p-4 w-1/2 mx-auto text-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
         />
       </div>
-      <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center">Patient Appointments</h1>
+      <h2 className="text-4xl font-extrabold text-gray-900 mb-8 text-center">Patient Appointments</h2>
       {filteredAppointments.length === 0 ? (
         <div className="text-center text-xl text-gray-700 mt-10">
           <p className="animate-pulse">There are no appointments at the moment.</p>

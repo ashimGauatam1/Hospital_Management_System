@@ -5,10 +5,10 @@ import Doctor from "../models/doctor.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/AsyncHandler.js";
-
+import User from '../models/user.js'
 
 const bookAppointment=asyncHandler(async(req,res)=>{
-    const { d_id, name, age, date, doctorName, problem } = req.body;
+    const { d_id, name, age, date, doctorName, problem,phone } = req.body;
     if (!d_id || !name || !age || !date || !doctorName || !problem) {
         throw new ApiError(401, "All fields are required");
     }
@@ -29,13 +29,17 @@ const bookAppointment=asyncHandler(async(req,res)=>{
         doctorName,
         problem,
         date,
+        phone,
+        email:req.user.email,
         user:req.user._id                
     });
     
     doctor.date.push(date);
     await doctor.save();
     const html=appointmentHtml(doctorName,problem,date)
-    await sendemail("ashimgautam695@gmail.com",'Appointment Conformation',html)
+    await sendemail(req.user.email,'Appointment Conformation',html)
+    
+   
     const updatedDoctor = await Doctor.findById(d_id);
     
     return res.status(200).json(
@@ -52,4 +56,19 @@ const bookAppointment=asyncHandler(async(req,res)=>{
 })
 
 
-export {bookAppointment}
+const getAppointmentofUser=asyncHandler(async(req,res)=>{
+    const id=req.params.id
+     const patient=await Appoint.findById(id)
+    if(!patient){
+        throw new ApiError(400,"No patient found")
+    }
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            "Appointment found",
+            patient
+        )
+    )
+})
+
+export {bookAppointment,getAppointmentofUser}

@@ -67,7 +67,9 @@ const doctorLogin=asyncHandler(async(req,res)=>{
         new ApiResponse(
             200,
             "Doctor login success",
-           doctor._id
+           {"id":doctor._id,
+            "photo":doctor.photo
+           }
         )
     )
 })

@@ -28,9 +28,9 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:8080/api/v1/doctor/login',data);
      if (response.status === 200) {
-     
-        sessionStorage.setItem('doctor-token',response.data.data)
-      
+      console.log(response.data.data);
+        sessionStorage.setItem('doctor-token',response.data.data.id)
+        sessionStorage.setItem('photo',response.data.data.photo)
         navigate('/doctorpage')
       }
     } catch (err) {

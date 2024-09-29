@@ -7,74 +7,73 @@ const Patient_info = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [patient, setPatient] = useState(null);
-  const [history,SetHistory]=useState('');
+  const [history, setHistory] = useState('');
   const [popupIsOpen, setPopupIsOpen] = useState(false);
   const [response, setResponse] = useState('');
   const [medicine, setMedicine] = useState('');
-  const authToken = localStorage.getItem('doctor-token');
+
   useEffect(() => {
     const fetchPatientDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/appoint/patient/${id}`, {
-          headers: { 'auth-token': authToken },
-        });
+        const response = await axios.get(`http://localhost:8080/api/v1/appoint/getuser/${id}`);
         if (response.status === 200) {
-          setPatient(response.data.appointment);
+          setPatient(response.data.data);  
         }
       } catch (error) {
-        console.error('Error fetchaing patient details', error);
+        console.error('Error fetching patient details', error);
       }
     };
 
     fetchPatientDetails();
-  }, [id, authToken]);
+  }, [id]);
 
   const handleResponse = async () => {
     try {
       await axios.post(`http://localhost:8080/api/appoint/patient/${id}`, {
         response,
         medicine,
-      }, {
-        headers: { 'auth-token': authToken },
       });
+
       setResponse('');
       setMedicine('');
+
       try {
-        await axios.delete(`http://localhost:8080/api/appoint/patient/${id}`, {
-          headers: { 'auth-token': authToken },
-        });
-        console.log("success")
-  
+        await axios.delete(`http://localhost:8080/api/appoint/patient/${id}`,
+         );
+        console.log("Success");
       } catch (error) {
         console.error('Error deleting patient', error);
       }
+
       alert('Response submitted successfully');
-      navigate('/doctorpage'); 
+      navigate('/doctorpage');
     } catch (error) {
       console.error('Error submitting response', error);
     }
   };
-  const openPopup=async(id)=>{
-    const response=await axios.get(`http://localhost:8080/api/appoint/history/${id}`)
-    console.log(response.data)
-    SetHistory(response.data);
+
+  const openPopup = async (userId) => {
+    const response = await axios.get(`http://localhost:8080/api/appoint/history/${userId}`);
+    console.log(response.data);
+    setHistory(response.data);
     setPopupIsOpen(true);
-  }
+  };
+
   const closePopup = () => {
     setPopupIsOpen(false);
-    SetHistory(null);
+    setHistory(null);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-cyan-100 to-blue-100 p-10 py-10">
       <h1 className="text-4xl font-extrabold text-gray-800 mb-8 text-center">Patient Details</h1>
-      
+
       {patient ? (
         <div className="bg-white shadow-xl rounded-xl p-8 transform transition-transform hover:scale-105 max-w-3xl mx-auto">
           <div className="flex flex-col lg:flex-row lg:items-start mb-8">
             <div className="lg:w-1/3">
               <img
-                src={`https://via.placeholder.com/150?text=${patient.name}`} 
+                src={patient.profile}  
                 alt={patient.name}
                 className="w-full h-32 object-cover rounded-full border-4 border-cyan-500 shadow-lg"
               />
@@ -86,10 +85,9 @@ const Patient_info = () => {
               <p className="text-gray-600 text-lg mb-2"><strong>Email:</strong> {patient.email}</p>
               <p className="text-gray-600 text-lg mb-2"><strong>Doctor:</strong> {patient.doctorName}</p>
               <p className="text-gray-600 text-lg mb-2"><strong>Date:</strong> {patient.date}</p>
-              <p className="text-gray-600 text-lg mb-2"><strong>Time:</strong> {patient.time}</p>
               <p className="text-gray-600 text-lg mb-4"><strong>Problem:</strong> {patient.problem}</p>
             </div>
-            <button className='bg-cyan-500 text-sky-50 rounded-lg font-bold w-auto'  onClick={() => openPopup(patient.user)}>Medical History</button> 
+            <button className='bg-cyan-500 text-sky-50 rounded-lg font-bold w-auto' onClick={() => openPopup(patient._id)}>Medical History</button> 
           </div>
 
           <h3 className="text-xl font-semibold text-gray-800 mb-4">Respond to Patient</h3>
@@ -114,10 +112,10 @@ const Patient_info = () => {
             Submit Response
           </button>
           <DetailsPopup
-        isOpen={popupIsOpen}
-        onClose={closePopup}
-        details={history}
-      />
+            isOpen={popupIsOpen}
+            onClose={closePopup}
+            details={history}
+          />
         </div>
       ) : (
         <p className="text-xl text-gray-700 text-center">Loading patient details...</p>
