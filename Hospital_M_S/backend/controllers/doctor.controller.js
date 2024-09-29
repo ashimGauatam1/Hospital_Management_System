@@ -50,7 +50,7 @@ const registerDoctor=asyncHandler(async(req,res)=>{
 
 const doctorLogin=asyncHandler(async(req,res)=>{
     const {doctorid,password}=req.body;
-    
+
     if(!doctorid,!password){
         throw new ApiError(401,"all fields are required")
     }
@@ -62,11 +62,12 @@ const doctorLogin=asyncHandler(async(req,res)=>{
     if(!loggedDoctor){
         throw new ApiError(400,"Invalid credentials")
     }
+    
     return res.status(200).json(
         new ApiResponse(
             200,
             "Doctor login success",
-            loggedDoctor
+           doctor._id
         )
     )
 })

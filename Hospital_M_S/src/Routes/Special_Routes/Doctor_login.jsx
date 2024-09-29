@@ -4,7 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
-    const [data,Setdata]=useState();
+    const [data,Setdata]=useState([
+      {"doctorid":'',
+      "password":''}
+    ]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -23,10 +26,11 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/doctorlogin',data);
-
-      if (response.status === 200) {
-        localStorage.setItem('doctor-token',response.data.token)
+      const response = await axios.post('http://localhost:8080/api/v1/doctor/login',data);
+     if (response.status === 200) {
+     
+        sessionStorage.setItem('doctor-token',response.data.data)
+      
         navigate('/doctorpage')
       }
     } catch (err) {
@@ -46,8 +50,8 @@ const Login = () => {
             <label  className="block text-sm font-medium text-gray-700">ID</label>
             <input
               type="text"
-              id="DoctorsID"
-              name="DoctorsID"
+              id="doctorid"
+              name="doctorid"
               
               onChange={handlechange}
               className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"

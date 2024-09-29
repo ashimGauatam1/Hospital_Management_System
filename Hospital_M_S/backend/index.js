@@ -5,7 +5,8 @@ import userRouter from './routes/user.auth.route.js'
 import doctorRouter from './routes/doctor.route.js'
 import appointRouter from './routes/appoint.route.js'
 import cookieParser from "cookie-parser";
-import cros from 'cros'
+import cors from 'cors';
+
 
 config()
 const app=express()
@@ -14,11 +15,15 @@ const port=process.env.PORT
 connectDB();
 app.use(cookieParser())
 
-app.use(cros({
-    origin:"http://localhost:5173",
-    credentials:true
-}
-))
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  }));
+
+  
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
 
 app.use('/api/v1/users',userRouter)
 app.use('/api/v1/doctor',doctorRouter)

@@ -16,9 +16,8 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
     phone: "",
     doctorName: "",
     doctorId: "",
-    date: "",
+    datetime: "", 
     age: "",
-    time: "",
     problem: "",
   });
 
@@ -39,14 +38,19 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
         ...data,
         doctorName: data.doctorName || getRandomDoctor().name,
         doctorId: data.doctorId || getRandomDoctor().id,
+        
       };
-
       const response = await axios.post(
-        "http://localhost:8080/api/appoint/register",
-        appointmentData,
+        "http://localhost:8080/api/v1/appoint/book",
         {
-          headers: { "auth-token": authToken },
-        }
+          d_id: appointmentData.doctorId,
+          name: appointmentData.name,
+          age: appointmentData.age,
+          problem: appointmentData.problem,
+          date: appointmentData.datetime, 
+          doctorName: appointmentData.doctorName,
+        },
+        {withCredentials: true}
       );
 
       if (response.status === 200) {
@@ -206,7 +210,7 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                 </div>
                 <div>
                   <label
-                    htmlFor="name"
+                    htmlFor="age"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Age
@@ -217,7 +221,7 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                     name="age"
                     value={data.age}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-600 focus:ring-indigo-500 sm:text-sm"
-                    placeholder="Enter Your age "
+                    placeholder="Enter Your age"
                     required
                     maxLength={2}
                     onChange={handleChange}
@@ -226,7 +230,7 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
 
                 <div>
                   <label
-                    htmlFor="email"
+                    htmlFor="phone"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Phone Number
@@ -284,6 +288,7 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                       {doctors.map((doctor) => (
                         <option key={doctor.id} value={doctor.name}>
                           {doctor.name} - {doctor.specialty}
+                          
                         </option>
                       ))}
                     </select>
@@ -291,36 +296,22 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
                 )}
                 <div>
                   <label
-                    htmlFor="date"
+                    htmlFor="datetime"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Appointment Date
+                    Appointment Date and Time
                   </label>
                   <input
-                    type="date"
-                    name="date"
-                    id="date"
+                    type="datetime-local"
+                    name="datetime"
+                    id="datetime"
                     className="mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-cyan-600 focus:ring-indigo-500 sm:text-sm"
                     required
+                    value={data.datetime} // Bind value from state
                     onChange={handleChange}
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor="time"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Appointment Time
-                  </label>
-                  <input
-                    type="time"
-                    name="time"
-                    id="time"
-                    className="mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-cyan-600 focus:ring-indigo-500 sm:text-sm"
-                    required
-                    onChange={handleChange}
-                  />
-                </div>
+
                 <div>
                   <label
                     htmlFor="problem"

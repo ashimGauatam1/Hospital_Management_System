@@ -7,7 +7,7 @@ const DoctorPage = ({ handleLogout }) => {
   const [appointments, setAppointments] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredAppointments, setFilteredAppointments] = useState([]);
-  const authToken = localStorage.getItem('doctor-token');
+  const authToken = sessionStorage.getItem('doctor-token');
 
   useEffect(() => {
     if (!authToken) {
@@ -15,11 +15,10 @@ const DoctorPage = ({ handleLogout }) => {
     } else {
       const fetchAppointments = async () => {
         try {
-          const response = await axios.get('http://localhost:8080/api/auth/patientlist', {
-            headers: { 'auth-token': authToken },
-          });
-          setAppointments(response.data);
-          setFilteredAppointments(response.data);
+          const response = await axios.get(`http://localhost:8080/api/v1/doctor/appointment/${authToken}`);
+          console.log(response.data); 
+          setAppointments(response.data.data.Appointments || []); 
+          setFilteredAppointments(response.data.data.Appointments || []); 
         } catch (error) {
           console.error('Error fetching appointments', error);
         }
@@ -39,14 +38,14 @@ const DoctorPage = ({ handleLogout }) => {
 
   return (
     <div className="min-h-screen bg-cyan-50 p-8 flex flex-col">
-        <div className='flex justify-end'> 
-                 <button
+      <div className='flex justify-end'> 
+        <button
           className="inline-flex text-white bg-cyan-600 border-0 py-2 px-6 focus:outline-none hover:bg-cyan-800 rounded text-lg"
           onClick={handleLogout}
         >
           Log Out
         </button>
-        </div>
+      </div>
       <div className="flex justify-between items-center mb-8">
         <input
           type="text"

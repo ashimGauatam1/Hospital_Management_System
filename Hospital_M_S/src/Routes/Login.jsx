@@ -24,13 +24,13 @@ const Login = ({ setShowLogin, handleLogout }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/login', data);
+      const response = await axios.post('http://localhost:8080/api/v1/users/login', data,{ withCredentials: true });
       if (response.status === 200) {
         const now = Date.now();
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('tokenTimestamp', now.toString());
         localStorage.setItem('user_type', response.data.type);
-        window.location.reload();
+        // window.location.reload();
         setShowLogin(false);
         setLogoutTimeout(24 * 60 * 60 * 1000);
       }

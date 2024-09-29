@@ -8,9 +8,7 @@ import asyncHandler from "../utils/AsyncHandler.js";
 
 
 const bookAppointment=asyncHandler(async(req,res)=>{
-    console.log("hi");
-    const { d_id, name, age, date, doctorName, problem, user } = req.body;
-
+    const { d_id, name, age, date, doctorName, problem } = req.body;
     if (!d_id || !name || !age || !date || !doctorName || !problem) {
         throw new ApiError(401, "All fields are required");
     }
@@ -31,7 +29,7 @@ const bookAppointment=asyncHandler(async(req,res)=>{
         doctorName,
         problem,
         date,
-        user                 // need to change
+        user:req.user._id                
     });
     
     doctor.date.push(date);
