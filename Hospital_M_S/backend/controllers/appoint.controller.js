@@ -59,16 +59,44 @@ const bookAppointment=asyncHandler(async(req,res)=>{
 const getAppointmentofUser=asyncHandler(async(req,res)=>{
     const id=req.params.id
      const patient=await Appoint.findById(id)
+
     if(!patient){
         throw new ApiError(400,"No patient found")
     }
+    if(patient.doctorid==null){
+        throw new ApiError(400,"No ")
+    }
+    const profile=await User.findById(patient.user).select("-password -ismember -isverified -otp -otp_expiry -refreshToken ")
+ 
     return res.status(200).json(
         new ApiResponse(
             200,
             "Appointment found",
-            patient
+            {
+            "patient":patient,
+            "user":profile
+        }
         )
     )
 })
 
-export {bookAppointment,getAppointmentofUser}
+const checkedAppointments = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+    const user = await Appoint.findById(id);
+    user.doctorid=null
+    user.save();
+    console.log(user);
+    if (!user) {
+        return res.status(404).json(new ApiResponse(404, "Appointment not found"));
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, "Checked Out", [])
+    );
+});
+
+
+
+
+export {bookAppointment,getAppointmentofUser,checkedAppointments}

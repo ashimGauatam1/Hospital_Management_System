@@ -50,10 +50,11 @@ function App() {
   };
   const handleLogout = () => {
     setAuthToken(null);
+    window.location.reload();
     localStorage.removeItem('token');
     localStorage.removeItem('tokenTimestamp');
     localStorage.removeItem('user_type');
-    localStorage.removeItem('doctor-token');
+    sessionStorage.removeItem('doctor-token');
   };
   const isAuthenticated = !!authToken;
   const ismember=!!userType;

@@ -9,9 +9,7 @@ import sendemail from '../Emails/SendEmail.js'
 
 const generateAccessAndRefreshToken=async(userId)=>{
     const user=await User.findById(userId)
-    console.log(user);
-    const refreshToken=user.generateRefreshToken();
-    console.log(refreshToken);
+      const refreshToken=user.generateRefreshToken();
     const accessToken=user.generateAccessToken()
     user.refreshToken=refreshToken;
     await user.save({validateBeforeSave:false})
@@ -106,8 +104,7 @@ const loginUser=asyncHandler(async(req,res)=>{
     if(!authorizeduser){
         throw new ApiError(401,"invalid credentials")
     }
-    console.log(authorizeduser);
-    const {accessToken,refreshToken}=await generateAccessAndRefreshToken(user._id)
+      const {accessToken,refreshToken}=await generateAccessAndRefreshToken(user._id)
     const options={
         http:true,
         secure:true
@@ -227,16 +224,64 @@ const logoutUser=asyncHandler(async(req,res)=>{
 })
 
 const getUser=asyncHandler(async(req,res)=>{
+    const id=req.user._id 
+    const user=await User.findById(id).select("-password -ismember -isverified -otp -otp_expiry -refreshToken ")
     return res.status(200).json(
         new ApiResponse(
             200,
             "user is verified",
             {
-                name:req.user.name
+                user:user
+            }
+        )
+    )
+})
+
+const updateUser = asyncHandler(async (req, res) => {
+
+    const { id,problem, response, medicine } = req.body;
+ 
+    const user = await User.findById(id);
+    if (!user) {
+        return res.status(404).json(new ApiResponse(404, "User not found"));
+    }
+
+    const medicalEntry = {
+        problem,
+        response,
+        medicine
+    };
+
+    user.medicalHistory.push(medicalEntry);
+    await user.save({ validateBeforeSave: false });
+
+    const updatedUser = await User.findById(id).select("-password -ismember -isverified -otp -otp_expiry -refreshToken");
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            "User updated",
+            {
+                user: updatedUser
+            }
+        )
+    );
+});
+
+
+const getHistory=asyncHandler(async(req,res)=>{
+    const id=req.params.id
+    const user=await User.findById(id).select("-password -ismember -isverified -otp -otp_expiry -refreshToken ")
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            "user is verified",
+            {
+                user:user.medicalHistory
             }
         )
     )
 })
 
 
-export {RegisterUser,loginUser,logoutUser,getUser,verifyOpt,resendEmail,changePassword}
+export {RegisterUser,loginUser,logoutUser,getUser,verifyOpt,resendEmail,changePassword,updateUser,getHistory}

@@ -46,16 +46,22 @@ const UserSchema = new Schema(
     refreshToken: {
       type: String,
     },
-    problem: [{
-      type: String,
-      required: true,}]
-    ,
-    response: [{
-      type: String,
-    }],
-    medicine: [{
-      type: String,
-    }],
+    
+   medicalHistory:[{
+    problem:{
+      type:String
+    },
+    response:{
+        type:String,
+    },
+    medicine:{
+      type:String
+    },
+    Date:{
+      type:Date,
+      default:Date.now
+    }
+   }]
   },
   {
     timestamps: true,
