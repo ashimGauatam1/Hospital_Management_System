@@ -71,7 +71,7 @@ function App() {
         <Route path='/about' element={<About/>}/>
         <Route path='/checkout' element={<Payment authToken={authToken} isAuthenticated={isAuthenticated}/>}/>
         <Route element={<Login handleLogout={handleLogout}/>}/>
-        <Route path='/otpverification' element={<Otp_verify isAuthenticated={isAuthenticated}/>}/>
+        <Route path='/otpverification/:id' element={<Otp_verify isAuthenticated={isAuthenticated}/>}/>
         <Route path='/medicineinfo' element={<MedicineSearch/>}/>
         <Route path='/admin' element={<Admin/>}/>
         <Route path='/staffs' element={<Staffs/>}/>

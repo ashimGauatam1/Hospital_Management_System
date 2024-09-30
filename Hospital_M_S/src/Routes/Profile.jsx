@@ -42,7 +42,7 @@ const Profile = ({ authToken, isAuthenticated }) => {
         try {
           const response = await axios.get(`http://localhost:8080/api/v1/users/gethistory/${userData._id}`);
           if (response.status === 200) {
-            setUserHistory(response.data.data.user); // Adjusted to get the correct data
+            setUserHistory(response.data.data.user);
           } else {
             setError("Failed to fetch user history");
           }
@@ -80,7 +80,7 @@ const Profile = ({ authToken, isAuthenticated }) => {
             <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
               <h1 data-aos='fade-up' className="text-3xl font-bold text-center text-cyan-600 mb-8">User Profile</h1>
               <div className="flex flex-col items-center mb-4">
-                <img src={userData.profile} alt="User Profile" className="w-24 h-24 rounded-full mb-4" /> {/* User profile image */}
+                <img src={userData.profile} alt="User Profile" className="w-24 h-24 rounded-full mb-4" /> 
                 <h2 data-aos='zoom-in' className="text-xl font-semibold text-gray-700">Full Name</h2>
                 <p data-aos='zoom-out' className="text-gray-900">{userData.name}</p>
               </div>

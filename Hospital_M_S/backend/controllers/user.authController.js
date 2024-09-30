@@ -51,6 +51,7 @@ const RegisterUser=asyncHandler(async(req,res)=>{
         }
     }
     const localProfilePath=req.files?.profile[0]?.path
+    console.log(localProfilePath);
     if(!localProfilePath){
         throw new ApiError(401,"Failed to select photo")
     }
