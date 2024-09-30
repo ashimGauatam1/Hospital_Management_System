@@ -225,7 +225,7 @@ const logoutUser=asyncHandler(async(req,res)=>{
 
 const getUser=asyncHandler(async(req,res)=>{
     const id=req.user._id 
-    const user=await User.findById(id).select("-password -ismember -isverified -otp -otp_expiry -refreshToken ")
+    const user=await User.findById(id).select("-password -ismember -isverified -otp -otp_expiry -refreshToken -medicalHistory")
     return res.status(200).json(
         new ApiResponse(
             200,
