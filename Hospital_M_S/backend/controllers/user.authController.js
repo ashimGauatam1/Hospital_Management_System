@@ -45,6 +45,13 @@ const RegisterUser=asyncHandler(async(req,res)=>{
     }
     const existingUser=await User.findOne({email})
     if (existingUser) {
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                "Verify user",
+                existingUser
+            )
+        )
         if (existingUser.isverified) {
             throw new ApiError(401, "Email exists");
        
@@ -142,10 +149,14 @@ const verifyOpt=asyncHandler(async(req,res)=>{
     if(presentDate>user.otp_expiry){
         throw new ApiError(400,"Opt has expired please get new otp")
     }
-    console.log(otp);
+    console.log(user.otp);
     if(user.otp!=otp){
        throw new ApiError(400,"Invalid otp")
     }
+    user.isverified=true
+    user.otp=null
+    user.otp_expiry=null
+    await user.save({validateBeforeSave:false})
     return res.status(200).json(
         new ApiResponse(
             200,
