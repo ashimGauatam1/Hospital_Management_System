@@ -30,7 +30,7 @@ router.route("/resend/:id").post(resendEmail);
 router.route("/changepass/:id").post(changePassword);
 
 router.route("/getuser").get(verifyUser, getUser);
-router.route("/logout").post(verifyUser, logoutUser);
+router.route("/logout").delete(verifyUser, logoutUser);
 router.route('/update').post(updateUser)
 router.route('/gethistory/:id').get(getHistory)
 

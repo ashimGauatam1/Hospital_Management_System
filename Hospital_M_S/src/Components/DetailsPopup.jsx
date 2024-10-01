@@ -14,18 +14,20 @@ const DetailsPopup = ({ isOpen, onClose, details }) => {
         <div className="max-h-[400px] overflow-y-auto space-y-4">
           {hasDetails ? (
             details.map((item, index) => (
-              <div key={index} className="p-4 bg-gray-100 rounded-lg shadow-sm">
-                <p className="text-lg font-semibold">Doctor Name:</p>
-                <p>{item.doctorName || 'N/A'}</p>
-                <p className="text-lg font-semibold">Date:</p>
-                <p>{item.date || 'N/A'}</p>
-                <p className="text-lg font-semibold">Problem:</p>
-                <p>{item.problem || 'N/A'}</p>
-                <p className="text-lg font-semibold">Response:</p>
-                <p>{item.response || 'N/A'}</p>
-                <p className="text-lg font-semibold">Medicine Used:</p>
-                <p>{item.medicine || 'N/A'}</p>
-              </div>
+              item.response ? (
+                <div key={index} className="p-4 bg-gray-100 rounded-lg shadow-sm">
+                  <p className="text-lg font-semibold">Doctor Name:</p>
+                  <p>{item.doctorname || 'N/A'}</p>
+                  <p className="text-lg font-semibold">Date:</p>
+                  <p>{item.Date.split('T')[0] || 'N/A'}</p>
+                  <p className="text-lg font-semibold">Problem:</p>
+                  <p>{item.problem || 'N/A'}</p>
+                  <p className="text-lg font-semibold">Response:</p>
+                  <p>{item.response || 'N/A'}</p>
+                  <p className="text-lg font-semibold">Medicine Used:</p>
+                  <p>{item.medicine || 'N/A'}</p>
+                </div>
+              ) : <p className="text-center text-gray-600">No details available</p> 
             ))
           ) : (
             <p className="text-center text-gray-600">No details available</p>

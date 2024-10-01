@@ -42,6 +42,7 @@ const Profile = ({ authToken, isAuthenticated }) => {
         try {
           const response = await axios.get(`http://localhost:8080/api/v1/users/gethistory/${userData._id}`);
           if (response.status === 200) {
+            console.log(response.data);
             setUserHistory(response.data.data.user);
           } else {
             setError("Failed to fetch user history");
@@ -101,7 +102,7 @@ const Profile = ({ authToken, isAuthenticated }) => {
                 {userHistory.map((appointment) => (
                   <Card
                     key={appointment._id}
-                    date={new Date(appointment.Date).toLocaleDateString()} // Format date here
+                    date={new Date(appointment.Date).toLocaleDateString()}
                     problem={appointment.problem}
                     response={appointment.response}
                     medicine={appointment.medicine}

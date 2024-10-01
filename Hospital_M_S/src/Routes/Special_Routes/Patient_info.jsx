@@ -31,12 +31,12 @@ const Patient_info = () => {
 
     const handleResponse = async () => {
         try {
-            // await axios.post(`http://localhost:8080/api/v1/users/update`, {
-            //     id: patient.user,
-            //     response,
-            //     medicine,
-            //     problem: patient.problem
-            // }, { withCredentials: true });
+            await axios.post(`http://localhost:8080/api/v1/users/update`, {
+                id: patient.user,
+                response,
+                medicine,
+                problem: patient.problem
+            }, { withCredentials: true });
 
             await axios.post(`http://localhost:8080/api/v1/appoint/checked/${patient._id}`, {
                 doctorId: null

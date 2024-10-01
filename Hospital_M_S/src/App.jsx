@@ -18,64 +18,49 @@ import DoctorLogin from './Routes/Special_Routes/Doctor_login';
 import Patient_info from './Routes/Special_Routes/Patient_info';
 import Staff from './Routes/Special_Routes/Staff';
 import Staffs from './Routes/Staffs';
+import axios from 'axios';
 
 function App() {
   const location = useLocation();
   const showNavbar = location.pathname !== '/admin'&& location.pathname !== '/doctorpage'&& location.pathname !== '/doctorlogin' &&!location.pathname.startsWith('/patient_info/');
+  const [isAuthenticated,setisAuthenticated]=useState(false)
+  const [ismember,setismember]=useState(false)
+  useEffect(()=>{
+    
+  const getuser=async()=>{
 
-  const [authToken, setAuthToken] = useState(null);
-  const [userType,SetuserType]=useState("");
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const tokenTimestamp = localStorage.getItem('tokenTimestamp');
-    const user_type=localStorage.getItem('user_type');
-    SetuserType(user_type);
-    if (token && tokenTimestamp) {
-      const now = Date.now();
-      const oneDay = 24 * 60 * 60 * 1000;
-
-      if (now - parseInt(tokenTimestamp) >= oneDay) {
-        handleLogout();
-      } else {
-        setAuthToken(token);
-        const remainingTime = oneDay - (now - parseInt(tokenTimestamp));
-        setLogoutTimeout(remainingTime);
-      }
+    try {
+      const response=await axios.get("http://localhost:8080/api/v1/users/getuser",
+        {withCredentials:true}
+      )
+     if(response.status==200){
+      setismember(response.data.data.user.ismember);
+      setisAuthenticated(true)
+     }
+    } catch (error) {
+      console.log(error);
     }
-  }, []);
-  const setLogoutTimeout = (timeout) => {
-    setTimeout(() => {
-      handleLogout();
-    }, timeout);
-  };
-  const handleLogout = () => {
-    setAuthToken(null);
-    window.location.reload();
-    localStorage.removeItem('token');
-    localStorage.removeItem('tokenTimestamp');
-    localStorage.removeItem('user_type');
-    sessionStorage.removeItem('doctor-token');
-  };
-  const isAuthenticated = !!authToken;
-  const ismember=!!userType;
- return (
+   }
+   getuser();
+  },[]) 
+  return (
     <div>
-  {showNavbar && <Navbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />}
+  {showNavbar && <Navbar isAuthenticated={isAuthenticated}   />}
   <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/register' element={<Signup />} />
         <Route path='/membership' element={<Membership />}/>
-        <Route path='/appointment' element={<BookAppointment authToken={authToken}  ismember={ismember} isAuthenticated={isAuthenticated}/>}/>
-        <Route path='/profile' element={<Profile authToken={authToken} isAuthenticated={isAuthenticated}/>}/>
+        <Route path='/appointment' element={<BookAppointment ismember={ismember}  isAuthenticated={isAuthenticated}/>}/>
+        <Route path='/profile' element={<Profile     isAuthenticated={isAuthenticated}/>}/>
         <Route path='/contact' element={<Contact/>}/>
         <Route path='/about' element={<About/>}/>
-        <Route path='/checkout' element={<Payment authToken={authToken} isAuthenticated={isAuthenticated}/>}/>
-        <Route element={<Login handleLogout={handleLogout}/>}/>
+        <Route path='/checkout' element={<Payment isAuthenticated={isAuthenticated}/>}/>
+        <Route element={<Login  />}/>
         <Route path='/otpverification/:id' element={<Otp_verify isAuthenticated={isAuthenticated}/>}/>
         <Route path='/medicineinfo' element={<MedicineSearch/>}/>
         <Route path='/admin' element={<Admin/>}/>
         <Route path='/staffs' element={<Staffs/>}/>
-        <Route path='/doctorpage' element={<DoctorPage handleLogout={handleLogout} />}/>
+        <Route path='/doctorpage' element={<DoctorPage   />}/>
         <Route path='/doctorlogin' element={<DoctorLogin/>}/>
         <Route path='/staff' element={<Staff/>} />
         <Route path='/patient_info/:id' element={<Patient_info/>}/>

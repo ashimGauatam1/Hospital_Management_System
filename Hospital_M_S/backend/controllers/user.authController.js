@@ -33,108 +33,96 @@ const sendingEmail=async(email,otp,otp_expiry)=>{
        console.log(error); 
     }
 }
+const RegisterUser = asyncHandler(async (req, res) => {
+    const { name, age, email, password } = req.body;
 
-const RegisterUser=asyncHandler(async(req,res)=>{
-    const {name,age,email,password}=req.body
-    if(
-        [name,age,email,password].some((field)=>{
-            field.trim()==""
-        })
-    ){
-        throw new ApiError(400,"All fields are required")
+    if ([name, age, email, password].some(field => !field.trim())) {
+        throw new ApiError(400, "All fields are required");
     }
-    const existingUser=await User.findOne({email})
+
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-        return res.status(200).json(
-            new ApiResponse(
-                200,
-                "Verify user",
-                existingUser
-            )
-        )
         if (existingUser.isverified) {
-            throw new ApiError(401, "Email exists");
-       
+            throw new ApiError(401, "Email already exists");
+        } else {
+            return res.status(201).json(new ApiResponse(201, "Verify user", []));
         }
     }
-    const localProfilePath=req.files?.profile[0]?.path
-    console.log(localProfilePath);
-    if(!localProfilePath){
-        throw new ApiError(401,"Failed to select photo")
+
+    const localProfilePath = req.files?.profile?.[0]?.path;
+    if (!localProfilePath) {
+        throw new ApiError(400, "Failed to select photo");
     }
 
-    const response=await uploadOnCloud(localProfilePath)
-    if(!response){
-        throw new ApiError(401,"Failed to upload photo")
+    const response = await uploadOnCloud(localProfilePath);
+    if (!response) {
+        throw new ApiError(500, "Failed to upload photo");
     }
-    const profile=response.url
-   const {otp,otp_expiry}=generateOtp()
-    console.log(otp);
-    const newuser=await User.create({
+    
+    const profile = response.url;
+    const { otp, otp_expiry } = generateOtp();
+
+    const newUser = await User.create({
         name,
         age,
         email,
         otp,
         otp_expiry,
         password,
-        profile
-    })
-    await sendingEmail(email,otp,otp_expiry)
-    await newuser.save()
-    const saveduser=await User.findById(newuser._id).select("-password -ismember -isverified -otp -otp_expiry -refreshToken -medicalHistory")
-    if(!saveduser){
-        throw new ApiError(402,"failed to save in database")
-    }
-   
-    return res.status(200).json(
-        new ApiResponse(
-            200,
-            "User register successfully",
-            saveduser
-        )
-    )
+        profile,
+    });
 
-})
+    await sendingEmail(email, otp, otp_expiry);
 
-const loginUser=asyncHandler(async(req,res)=>{
-    const {email,password}=req.body
-    if(!email || !password){
-        throw new ApiError(400,"all fields are required")
+    const savedUser = await User.findById(newUser._id).select("-password -ismember -isverified -otp -otp_expiry -refreshToken -medicalHistory");
+    if (!savedUser) {
+        throw new ApiError(500, "Failed to save user in database");
     }
-    const user=await User.findOne({email})
-    if(!user){
-        throw new ApiError(400,"No email is registeres please register first")
+
+    return res.status(200).json(new ApiResponse(200, "User registered successfully", savedUser));
+});
+
+
+const loginUser = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        throw new ApiError(400, "All fields are required");
     }
-    if(!user.isverified){
-        throw new ApiError(400,"Email is not verified yet")
+
+    const user = await User.findOne({ email });
+    if (!user) {
+        throw new ApiError(400, "No email is registered. Please register first.");
     }
-    const authorizeduser=await user.ispasswordCorrect(password)
-    if(!authorizeduser){
-        throw new ApiError(401,"invalid credentials")
+
+    if (!user.isverified) {
+        throw new ApiError(400, "Email is not verified yet.");
     }
-      const {accessToken,refreshToken}=await generateAccessAndRefreshToken(user._id)
-    const options={
-        http:true,
-        secure:true
+
+    const authorizedUser = await user.ispasswordCorrect(password);
+    if (!authorizedUser) {
+        throw new ApiError(401, "Invalid credentials.");
     }
-    const userwithToken=await User.findById(authorizeduser._id).select("-password -ismember -isverified -otp -otp_expiry -refreshToken -medicalHistory")
+
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
+    const options = {
+        http: true,
+        secure: true
+    };
+
+    const userWithToken = await User.findById(authorizedUser._id)
+        .select("-password -ismember -isverified -otp -otp_expiry -refreshToken -medicalHistory");
 
     return res
-    .status(200)
-    .cookie("refreshToken",refreshToken,options)
-    .cookie("accessToken",accessToken,options)
-    .json(
-        new ApiResponse(
-            200,
-            "User logged In ",
-            {
-                user,
-                "accessToken":accessToken,
-                "refreshToken":refreshToken
-            }
-        )
-    )
-})
+        .status(200)
+        .cookie("refreshToken", refreshToken, options)
+        .cookie("accessToken", accessToken, options)
+        .json(new ApiResponse(200, "User logged in", {
+            user: userWithToken,
+            accessToken,
+            refreshToken
+        }));
+});
 
 const verifyOpt=asyncHandler(async(req,res)=>{
     const id=req.params.id
@@ -237,7 +225,7 @@ const logoutUser=asyncHandler(async(req,res)=>{
 
 const getUser=asyncHandler(async(req,res)=>{
     const id=req.user._id 
-    const user=await User.findById(id).select("-password -ismember -isverified -otp -otp_expiry -refreshToken -medicalHistory")
+    const user=await User.findById(id).select("-password -isverified -otp -otp_expiry -refreshToken -medicalHistory -role -createdAt -updatedAt -__v")
     return res.status(200).json(
         new ApiResponse(
             200,

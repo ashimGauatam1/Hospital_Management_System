@@ -38,25 +38,44 @@ const renderIcon = (type) => {
 
 const Alert = ({ type, message, onClose }) => {
   const colors = {
-    success: 'bg-green-500 shadow-green-200',
-    warning: 'bg-yellow-500 shadow-yellow-200',
-    error: 'bg-red-500 shadow-red-200',
-    info: 'bg-blue-500 shadow-blue-200',
+    success: 'bg-green-500',
+    warning: 'bg-yellow-500',
+    error: 'bg-red-500',
+    info: 'bg-blue-500',
   };
 
   return (
-    <div className={`bg-gray-100 text-white font-semibold tracking-wide flex items-center w-max max-w-sm p-4 rounded-md shadow-md ${colors[type]}`} role="alert">
-      {renderIcon(type)}
-      <span className="block sm:inline text-sm mr-3">{message}</span>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-3 cursor-pointer shrink-0 fill-white ml-auto"
-        viewBox="0 0 320.591 320.591"
-        onClick={onClose}
-      >
-        <path d="M30.391 318.583a30.37 30.37 0 0 1-21.56-7.288c-11.774-11.844-11.774-30.973 0-42.817L266.643 10.665c12.246-11.459 31.462-10.822 42.921 1.424 10.362 11.074 10.966 28.095 1.414 39.875L51.647 311.295a30.366 30.366 0 0 1-21.256 7.288z" />
-        <path d="M287.9 318.583a30.37 30.37 0 0 1-21.257-8.806L8.83 51.963C-2.078 39.225-.595 20.055 12.143 9.146c11.369-9.736 28.136-9.736 39.504 0l259.331 257.813c12.243 11.462 12.876 30.679 1.414 42.922-.456.487-.927.958-1.414 1.414a30.368 30.368 0 0 1-23.078 7.288z" />
-      </svg>
+    <div className="fixed z-10 inset-0 overflow-y-auto">
+      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div className={`inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full`}>
+          <div>
+            <div className={`mx-auto flex items-center justify-center h-12 w-12 rounded-full ${colors[type]} p-2`}>
+              {renderIcon(type)}
+            </div>
+            <div className="mt-3 text-center sm:mt-5">
+              <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </h3>
+              <div className="mt-2">
+                <p className="text-sm text-gray-500">
+                  {message}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-5 sm:mt-6">
+            <button
+              className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm"
+              onClick={onClose}>
+              OK
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

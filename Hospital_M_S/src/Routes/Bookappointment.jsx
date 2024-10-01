@@ -5,7 +5,7 @@ import axios from "axios";
 import doctors from "../assets/objects/Doctor";
 import Alert from "../Components/Alert";
 
-const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
+const BookAppointment = ({ isAuthenticated,ismember }) => {
   const [type, SetType] = useState("");
   const [message, setMessage] = useState("");
   const [alerts, setAlert] = useState(false);
@@ -60,16 +60,14 @@ const BookAppointment = ({ isAuthenticated, authToken, ismember }) => {
           "Appointment booked successfully. You will be informed further through mail and phone."
         );
         setAlert(true);
-      } else {
-        SetType("danger");
-        setMessage("Something went wrong.");
-        setAlert(true);
       }
     } catch (error) {
-      console.error(error);
-      SetType("danger");
-      setMessage("An error occurred while booking the appointment.");
-      setAlert(true);
+      if(error.response.status === 400) {
+        SetType("danger");
+        setMessage("Date is already booked please try booking date again.");
+        setAlert(true);   
+      }
+     
     } finally {
       setLoading(false);
     }

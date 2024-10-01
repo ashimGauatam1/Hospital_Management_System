@@ -11,10 +11,7 @@ const Card = ({ date, time, problem ,prescription,medicine}) => {
             <span className="text-cyan-700 font-bold">Date:</span>
             <span className="text-gray-900 font-bold">{date}</span>
           </div>
-          <div className="flex justify-between mt-2">
-            <span className="text-cyan-700 font-bold">Time:</span>
-            <span className="text-gray-900 font-bold">{time}</span>
-          </div>
+          
           <div className="mt-2">
             <span className="text-cyan-800 font-bold">Problem:</span>
             <p className="text-gray-900 font-bold mt-1">{problem}</p>

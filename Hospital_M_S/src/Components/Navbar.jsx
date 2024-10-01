@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Login from '../Routes/Login';
+import axios from 'axios';
 
-const Navbar = ({ isAuthenticated, handleLogout }) => {
+const Navbar = ({ isAuthenticated }) => {
   const [showLogin, setShowLogin] = useState(false);
- 
+ const handleLogout=async()=>{
+
+  try {
+    const response=await axios.delete("http://localhost:8080/api/v1/users/logout",
+      {withCredentials:true}
+    )
+    window.location.reload()
+  } catch (error) {
+    console.log(error);
+  }
+ }
   return (
     <>
       <div>

@@ -57,6 +57,11 @@ const UserSchema = new Schema(
     medicine:{
       type:String
     },
+    
+      doctorname:{
+        type:String
+      
+    },
     Date:{
       type:Date,
       default:Date.now

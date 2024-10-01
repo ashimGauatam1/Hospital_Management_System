@@ -7,21 +7,22 @@ import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/AsyncHandler.js";
 import User from '../models/user.js'
 
-const bookAppointment=asyncHandler(async(req,res)=>{
-    const { d_id, name, age, date, doctorName, problem,phone } = req.body;
+const bookAppointment = asyncHandler(async (req, res) => {
+    const { d_id, name, age, date, doctorName, problem, phone } = req.body;
+
     if (!d_id || !name || !age || !date || !doctorName || !problem) {
         throw new ApiError(401, "All fields are required");
     }
-    
+
     const doctor = await Doctor.findById(d_id);
     if (!doctor) {
-        throw new ApiError(400, "No doctor found");
+        throw new ApiError(401, "No doctor found");
     }
-    
+
     if (doctor.date.includes(date)) {
         throw new ApiError(400, "Invalid date as Date is already booked");
     }
-    
+
     const appoint = await Appoint.create({
         doctorid: d_id,
         name,
@@ -30,18 +31,32 @@ const bookAppointment=asyncHandler(async(req,res)=>{
         problem,
         date,
         phone,
-        email:req.user.email,
-        user:req.user._id                
+        email: req.user.email,
+        user: req.user._id
     });
-    
+
     doctor.date.push(date);
     await doctor.save();
-    const html=appointmentHtml(doctorName,problem,date)
-    await sendemail(req.user.email,'Appointment Conformation',html)
-    
-   
+
+    const medicalHistoryEntry = {
+        problem: problem,
+        response: "",
+        medicine: "",
+        doctorname: doctorName,
+        Date: date
+    };
+
+    const user = await User.findById(req.user._id);
+    if (user) {
+        user.medicalHistory.push(medicalHistoryEntry);
+        await user.save();
+    }
+
+    const html = appointmentHtml(doctorName, problem, date);
+    await sendemail(req.user.email, 'Appointment Confirmation', html);
+
     const updatedDoctor = await Doctor.findById(d_id);
-    
+
     return res.status(200).json(
         new ApiResponse(
             200,
@@ -52,8 +67,8 @@ const bookAppointment=asyncHandler(async(req,res)=>{
             }
         )
     );
-    
-})
+});
+
 
 
 const getAppointmentofUser=asyncHandler(async(req,res)=>{

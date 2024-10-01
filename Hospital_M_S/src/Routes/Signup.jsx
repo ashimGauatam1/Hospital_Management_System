@@ -10,7 +10,7 @@ const Signup = () => {
   const [type, setType] = useState('');
   const [message, setMessage] = useState('');
   const [alerts, setAlert] = useState(false);
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     name: '',
     email: '',
@@ -27,6 +27,7 @@ const Signup = () => {
       setType('error');
       setMessage('Please fill in all fields.');
       setAlert(true);
+      setLoading(false);
       return;
     }
 
@@ -46,10 +47,24 @@ const Signup = () => {
       if (response.status === 200) {
         navigate(`/otpverification/${response.data.data._id}`);
       }
+      if (response.status === 201) {
+        setLoading(false);
+        setType('success');
+        setMessage("PLease rensend Otp and verify your account");
+        setAlert(true);
+      }
     } catch (error) {
-      setType('error');
-      setMessage(error.response?.data?.message || 'Something went wrong');
-      setAlert(true);
+      if(error.response.status == 401) {
+        setMessage("Email Already Exists, Please Login with Credentials");
+        setAlert(true);
+      }else if(error.response.status == 400) {
+        setMessage("Please select photo");
+        setAlert(true);
+      }
+      else {
+        setMessage('Something went wrong');
+        setAlert(true);
+      }
     }
 
     setLoading(false);
@@ -66,11 +81,6 @@ const Signup = () => {
 
   return (
     <div className="font-[sans-serif] bg-white md:h-screen">
-      {alerts && (
-        <div className="ml-5 py-20 -mb-20">
-          <Alert type={type} message={message} onClose={() => setAlert(false)} />
-        </div>
-      )}
       <div className="grid md:grid-cols-2 items-center gap-5 h-full">
         <div data-aos="zoom-out-right" className="max-md:order-1 p-4 mt-10">
           <img
@@ -82,6 +92,11 @@ const Signup = () => {
         <div data-aos="fade-up-left" className="flex items-center md:p-8 p-6 bg-cyan-700 rounded-sm h-full lg:w-11/12 lg:ml-auto">
           <form className="max-w-lg w-full mx-auto mt-20">
             <h3 className="text-3xl font-bold text-yellow-400 mb-5">Create an account</h3>
+            {alerts && (
+              <div className="mb-4">
+                <Alert type={type} message={message} onClose={() => setAlert(false)} />
+              </div>
+            )}
             {['name', 'email', 'age', 'password'].map((field) => (
               <div className="mb-4" key={field}>
                 <label className="text-white text-xs block mb-2">{field.charAt(0).toUpperCase() + field.slice(1)}</label>
@@ -104,15 +119,16 @@ const Signup = () => {
                 className="w-full bg-transparent text-sm text-white border-b border-gray-300 focus:border-yellow-400 px-2 py-3 outline-none"
               />
             </div>
-           {
-           !loading? 
-           <button onClick={fetchUser} type="button" className="w-full shadow-xl py-3 px-6 text-sm text-gray-800 font-semibold rounded-md bg-yellow-400 hover:bg-yellow-700 hover:text-white focus:outline-none">
-              Register
-            </button>
-            :
-            <button disabled type="button" className="w-full shadow-xl py-3 px-6 text-sm text-gray-800 font-semibold rounded-md bg-yellow-400 hover:bg-yellow-700 hover:text-white focus:outline-none">
-            Loading
-          </button>}
+            {
+              !loading ?
+                <button onClick={fetchUser} type="button" className="w-full shadow-xl py-3 px-6 text-sm text-gray-800 font-semibold rounded-md bg-yellow-400 hover:bg-yellow-700 hover:text-white focus:outline-none">
+                  Register
+                </button>
+                :
+                <button disabled type="button" className="w-full shadow-xl py-3 px-6 text-sm text-gray-800 font-semibold rounded-md bg-yellow-400 hover:bg-yellow-700 hover:text-white focus:outline-none">
+                  Loading
+                </button>
+            }
             <p className="text-sm text-white mt-8">Already have an account? <a className="text-yellow-400 font-semibold hover:underline ml-1">Login here</a></p>
           </form>
         </div>
