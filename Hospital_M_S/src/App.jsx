@@ -22,7 +22,7 @@ import axios from 'axios';
 
 function App() {
   const location = useLocation();
-  const showNavbar = location.pathname !== '/admin'&& location.pathname !== '/doctorpage'&& location.pathname !== '/doctorlogin' &&!location.pathname.startsWith('/patient_info/');
+  const showNavbar = location.pathname !== '/admin'&& location.pathname !== '/doctorpage'&& location.pathname !== '/doctorlogin' &&!location.pathname.startsWith('/patient_info/') && location.pathname !== '/staff';
   const [isAuthenticated,setisAuthenticated]=useState(false)
   const [ismember,setismember]=useState(false)
   useEffect(()=>{

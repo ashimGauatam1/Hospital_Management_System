@@ -9,6 +9,10 @@ const AppointSchema = new Schema({
     type:mongoose.Types.ObjectId,
     ref:'Doctor'
   },
+  appointmentId: {
+    type: String,
+    unique: true,
+  },
   name: {
     type: String,
     required: [true, "Name is required"],
@@ -41,6 +45,22 @@ const AppointSchema = new Schema({
   },
   
 });
+
+
+AppointSchema.pre("save", async function(next) {
+  if (this.isNew) {
+    const Counter = mongoose.model("Counter", new Schema({ sequenceValue: { type: Number, default: 100000} }));
+    const counter = await Counter.findOneAndUpdate(
+      {},
+      { $inc: { sequenceValue: 1 } },
+      { new: true, upsert: true }
+    );
+
+    this.appointmentId = `APPOINT-${counter.sequenceValue}`;
+  }
+  next();
+});
+
 
 const Appoint=mongoose.model("Appoint",AppointSchema)
 
