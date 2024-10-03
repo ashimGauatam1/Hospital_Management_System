@@ -7,7 +7,7 @@ import Appoint from "../models/appointment.js";
 
 
 const registerDoctor=asyncHandler(async(req,res)=>{
-    const {doctorid,password,specialization,email} =req.body
+    const {doctorid,password,specialization,email,name} =req.body
     if(
         [doctorid,password,specialization].some((field)=>{
             field.trim()==''
@@ -29,6 +29,7 @@ const registerDoctor=asyncHandler(async(req,res)=>{
     }
     
     const createdUser=await Doctor.create({
+        name,
         doctorid,
         password,
         email,
@@ -74,6 +75,34 @@ const doctorLogin=asyncHandler(async(req,res)=>{
     )
 })
 
+const getDoctors=asyncHandler(async(req,res)=>{
+    const doctor=await Doctor.find()
+    if(!doctor){
+        throw new ApiResponse(400,"There are no doctors")
+    }
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            "All doctors",
+            doctor
+        )
+    )
+})
+
+const deleteDoctor=asyncHandler(async(req,res)=>{
+    const id=req.params.id
+    const doctor=await Doctor.findByIdAndDelete({_id:id})
+    if(!doctor){
+        throw new ApiError(400,"Error to delete doctor")
+    }
+    return res.status(200).json(
+        new ApiResponse(
+            400,
+            "user deleted",
+            []
+        )
+    )
+})
 
 const getAppointments=asyncHandler(async(req,res)=>{
     const id=req.params.id
@@ -99,4 +128,4 @@ const getAppointments=asyncHandler(async(req,res)=>{
 
 
 
-export {registerDoctor,doctorLogin,getAppointments}
+export {registerDoctor,doctorLogin,getAppointments,getDoctors,deleteDoctor}

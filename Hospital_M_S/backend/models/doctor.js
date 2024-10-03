@@ -10,6 +10,9 @@ const doctorSchema = new Schema({
     type: String,
     required: [true, "password is required"],
   },
+  name:{
+    type:String
+  },
   email: {
     type: String,
   },
