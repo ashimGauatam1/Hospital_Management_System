@@ -20,10 +20,11 @@ import Staff from './Routes/Special_Routes/Staff';
 import Staffs from './Routes/Staffs';
 import axios from 'axios';
 import DoctorChange from './Routes/Special_Routes/DoctorChange';
+import Pharmacy from './Routes/Special_Routes/Pharmacy';
 
 function App() {
   const location = useLocation();
-  const showNavbar = location.pathname !== '/admin'&& location.pathname !== '/doctorpage'&& location.pathname !== '/doctorlogin' &&!location.pathname.startsWith('/patient_info/') && location.pathname !== '/staff' && location.pathname !== '/doctorchange';
+  const showNavbar = location.pathname !== '/admin'&& location.pathname !== '/doctorpage'&& location.pathname !== '/doctorlogin' &&!location.pathname.startsWith('/patient_info/') && location.pathname !== '/staff' && location.pathname !== '/doctorchange' && location.pathname !== '/pharmacy';
   const [isAuthenticated,setisAuthenticated]=useState(false)
   const [ismember,setismember]=useState(false)
   useEffect(()=>{
@@ -66,6 +67,7 @@ function App() {
         <Route path='/staff' element={<Staff/>} />
         <Route path='/patient_info/:id' element={<Patient_info/>}/>
         <Route path='/doctorchange' element={<DoctorChange/>}/>
+        <Route path='/pharmacy' element={<Pharmacy/>}/>
       </Routes>
     </div>
   );

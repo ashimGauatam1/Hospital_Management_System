@@ -9,7 +9,6 @@ import User from '../models/user.js'
 
 const bookAppointment = asyncHandler(async (req, res) => {
     const { d_id, name, age, date, doctorName, problem, phone } = req.body;
-
     if (!d_id || !name || !age || !date || !doctorName || !problem) {
         throw new ApiError(401, "All fields are required");
     }
@@ -95,13 +94,38 @@ const getAppointmentofUser=asyncHandler(async(req,res)=>{
     )
 })
 
+const updateAppointment = asyncHandler(async (req, res) => {
+
+    const { id, medicine } = req.body;
+ 
+    const appointment = await Appoint.findById(id);
+    if (!appointment) {
+        return res.status(404).json(new ApiResponse(404, "Appointment not found"));
+    }
+
+    appointment.medicine=medicine
+
+    await appointment.save({validateBeforeSave})
+
+    const updatedAppointment = await Appoint.findById(id)
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            "User updated",
+            {
+                appoint: updatedAppointment
+            }
+        )
+    );
+});
+
+
 const checkedAppointments = asyncHandler(async (req, res) => {
     const id = req.params.id;
     console.log(id);
     const user = await Appoint.findById(id);
     user.doctorid=null
     user.save();
-    console.log(user);
     if (!user) {
         return res.status(404).json(new ApiResponse(404, "Appointment not found"));
     }
@@ -111,7 +135,23 @@ const checkedAppointments = asyncHandler(async (req, res) => {
     );
 });
 
+const pharmacy=asyncHandler(async(req,res)=>{
+    const appointmentId=req.params.id
+    const getAppointments=await Appoint.findOne({appointmentId})
+    if(!getAppointments){
+        throw new ApiError(
+            400,
+            "no appointments found",
+        )
+    }
+  
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            "Appointment found",
+            getAppointments
+        )
+    )
+})
 
-
-
-export {bookAppointment,getAppointmentofUser,checkedAppointments}
+export {bookAppointment,getAppointmentofUser,checkedAppointments,pharmacy,updateAppointment}

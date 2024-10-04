@@ -37,7 +37,11 @@ const Patient_info = () => {
                 medicine,
                 problem: patient.problem
             }, { withCredentials: true });
-
+            await axios.post(`http://localhost:8080/api/v1/appoint/update`, {
+                id:_id,
+                medicine,
+                },{ withCredentials: true });
+            
             await axios.post(`http://localhost:8080/api/v1/appoint/checked/${patient._id}`, {
                 doctorId: null
             }, { withCredentials: true });

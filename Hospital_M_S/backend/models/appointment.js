@@ -43,7 +43,9 @@ const AppointSchema = new Schema({
     type: String,
     required: true,
   },
-  
+  medicine:{
+    type:String
+  }
 });
 
 

@@ -19,7 +19,8 @@ const registerDoctor=asyncHandler(async(req,res)=>{
     if(doctor){
         throw new ApiError(400,"Doctor with doctor id is present")
     }
-    const photopath=req.files?.photo[0]?.path
+    const photopath= req.files?.photo?.[0]?.path;
+    console.log(photopath);
     if(!photopath){
         throw new ApiError(400,"Could not find the photo")
     }
@@ -91,7 +92,8 @@ const getDoctors=asyncHandler(async(req,res)=>{
 
 const deleteDoctor=asyncHandler(async(req,res)=>{
     const id=req.params.id
-    const doctor=await Doctor.findByIdAndDelete({_id:id})
+    console.log(id);
+    const doctor=await Doctor.findByIdAndDelete(id)
     if(!doctor){
         throw new ApiError(400,"Error to delete doctor")
     }

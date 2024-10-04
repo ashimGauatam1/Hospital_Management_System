@@ -7,6 +7,7 @@ import {
   registerDoctor,
 } from "../controllers/doctor.controller.js";
 import upload from "../middlewares/multer.js";
+
 const router = Router();
 
 router.route("/register").post(

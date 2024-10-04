@@ -44,6 +44,7 @@ const Signup = () => {
       const response = await axios.post('http://localhost:8080/api/v1/users/register', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+      console.log(response);
       if (response.status === 200) {
         navigate(`/otpverification/${response.data.data._id}`);
       }
