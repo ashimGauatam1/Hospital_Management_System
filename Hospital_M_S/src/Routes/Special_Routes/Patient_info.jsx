@@ -37,25 +37,27 @@ const Patient_info = () => {
                 medicine,
                 problem: patient.problem
             }, { withCredentials: true });
+    
             await axios.post(`http://localhost:8080/api/v1/appoint/update`, {
-                id:_id,
+                id: patient._id,
                 medicine,
-                },{ withCredentials: true });
-            
+            }, { withCredentials: true });
+    
             await axios.post(`http://localhost:8080/api/v1/appoint/checked/${patient._id}`, {
                 doctorId: null
             }, { withCredentials: true });
-
+    
             setResponse('');
             setMedicine('');
-
+    
             alert('Response submitted successfully');
             navigate('/doctorpage');
         } catch (error) {
             console.error('Error submitting response', error);
+            alert('Failed to submit response. Please try again.');
         }
     };
-
+    
     const openPopup = async (userId) => {
         const response = await axios.get(`http://localhost:8080/api/v1/users/gethistory/${userId}`);
         setHistory(response.data.data.user);

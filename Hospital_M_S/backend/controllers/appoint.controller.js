@@ -105,7 +105,7 @@ const updateAppointment = asyncHandler(async (req, res) => {
 
     appointment.medicine=medicine
 
-    await appointment.save({validateBeforeSave})
+    await appointment.save({validateBeforeSav:false})
 
     const updatedAppointment = await Appoint.findById(id)
     return res.status(200).json(

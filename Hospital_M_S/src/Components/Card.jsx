@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-const Card = ({ date, time, problem ,prescription,medicine}) => {
+const Card = ({ date, problem ,response,medicine}) => {
   return (
     <div className="max-w-sm mx-auto bg-white shadow-gray-900 rounded-lg overflow-hidden my-4  " >
       <div className="p-4">
@@ -18,7 +18,7 @@ const Card = ({ date, time, problem ,prescription,medicine}) => {
           </div>
           <div className="mt-2">
             <span className="text-cyan-800 font-bold">Prescription:</span>
-            <p className="text-gray-900 font-bold mt-1">{prescription}</p>
+            <p className="text-gray-900 font-bold mt-1">{response}</p>
           </div>
           <div className="mt-2">
             <span className="text-cyan-800 font-bold">Medicine:</span>
@@ -26,7 +26,7 @@ const Card = ({ date, time, problem ,prescription,medicine}) => {
           </div>
         </div>
         {
-          medicine || prescription?
+          medicine || response?
           <div className='py-5'>
             <a className='bg-green-400  font-bold p-1'>Completed</a>
             </div>
