@@ -69,8 +69,8 @@ const Pharmacy = () => {
       <body>
         <div class="header">
           <h1>City Hospital</h1>
-          <h2>Pokhara, Baggar</h2>
-          <p>Phone: +977-1234567890</p>
+          <h2>Pokhara, Nepal</h2>
+          <p>Phone: +977-9864452384</p>
           <hr />
           <h2>Bill Receipt</h2>
         </div>

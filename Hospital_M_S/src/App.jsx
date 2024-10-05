@@ -27,6 +27,7 @@ function App() {
   const showNavbar = location.pathname !== '/admin'&& location.pathname !== '/doctorpage'&& location.pathname !== '/doctorlogin' &&!location.pathname.startsWith('/patient_info/') && location.pathname !== '/staff' && location.pathname !== '/doctorchange' && location.pathname !== '/pharmacy';
   const [isAuthenticated,setisAuthenticated]=useState(false)
   const [ismember,setismember]=useState(false)
+  const [isStaff,setisStaff]=useState('')
   useEffect(()=>{
     
   const getuser=async()=>{
@@ -37,6 +38,7 @@ function App() {
       )
      if(response.status==200){
       setismember(response.data.data.user.ismember);
+      setisStaff(response.data.data.user.role);
       setisAuthenticated(true)
      }
     } catch (error) {
@@ -49,7 +51,7 @@ function App() {
     <div>
   {showNavbar && <Navbar isAuthenticated={isAuthenticated}   />}
   <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<Home isStaff={isStaff} />} />
         <Route path='/register' element={<Signup />} />
         <Route path='/membership' element={<Membership />}/>
         <Route path='/appointment' element={<BookAppointment ismember={ismember}  isAuthenticated={isAuthenticated}/>}/>

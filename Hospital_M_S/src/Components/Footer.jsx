@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Footer = () => {
+const Footer = ({isStaff}) => {
   return (
     <div>
       <footer className="text-gray-600 body-font bg-emerald-400">
@@ -20,9 +20,12 @@ const Footer = () => {
           <li>
             <Link to={'/doctorlogin'} className="text-gray-600 hover:text-gray-800">Doctor</Link>
           </li>
+          { isStaff =='staff' ?
           <li>
-            <Link to={'/staff'} className="text-gray-600 hover:text-gray-800">Satff</Link>
+            <Link to={'/staff'} className="text-gray-600 hover:text-gray-800">Staff</Link>
           </li>
+          :<></>}
+          
           <li>
             <a className="text-gray-600 hover:text-gray-800"></a>
           </li>

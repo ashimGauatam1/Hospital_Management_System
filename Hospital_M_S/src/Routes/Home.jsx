@@ -7,7 +7,7 @@ import Footer from '../Components/Footer';
 import main from '../assets/img/main.png';
 import { Link } from 'react-router-dom';
 
-const Home = () => {
+const Home = ({isStaff}) => {
   useEffect(()=>{
     AOS.init({
       duration:2000,
@@ -102,7 +102,7 @@ const Home = () => {
     </div>
   </div>
 </section>
-  {/* download */}
+
   <section className="text-gray-600 body-font ">
   <div className="container px-5 py-24 mx-auto flex items-center md:flex-row flex-col">
     <div className="flex flex-col md:pr-10 md:mb-0 mb-6 pr-0 w-full md:w-auto md:text-left text-center">
@@ -132,7 +132,7 @@ const Home = () => {
     </div>
   </div>
 </section>
-<Footer/>
+<Footer isStaff={isStaff}/>
     </div>
   )
 }
