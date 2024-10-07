@@ -77,9 +77,7 @@ const getAppointmentofUser=asyncHandler(async(req,res)=>{
     if(!patient){
         throw new ApiError(400,"No patient found")
     }
-    if(patient.doctorid==null){
-        throw new ApiError(400,"No ")
-    }
+    
     const profile=await User.findById(patient.user).select("-password -ismember -isverified -otp -otp_expiry -refreshToken ")
  
     return res.status(200).json(

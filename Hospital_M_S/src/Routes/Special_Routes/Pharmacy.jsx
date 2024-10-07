@@ -144,9 +144,9 @@ const Pharmacy = () => {
             <p><strong>Medicines:</strong> {appointmentData.medicine}</p>
 
             <h3 className="text-lg font-semibold mt-4">Medicines</h3>
-            <table className="min-w-full mt-2 border-collapse border border-gray-300">
+            <table className="min-w-full mt-2 border-collapse border border-red-300 " >
               <thead>
-                <tr className="bg-gray-200">
+                <tr className="bg-purple-200">
                   <th className="border border-gray-300 p-2">Medicine Name</th>
                   <th className="border border-gray-300 p-2">Quantity</th>
                   <th className="border border-gray-300 p-2">Price</th>
@@ -154,7 +154,7 @@ const Pharmacy = () => {
               </thead>
               <tbody>
                 {medicines.map((medicine, index) => (
-                  <tr key={index} className="hover:bg-gray-100">
+                  <tr key={index} className="hover:bg-red-100">
                     <td className="border border-gray-300 p-2">
                       <input
                         type="text"
