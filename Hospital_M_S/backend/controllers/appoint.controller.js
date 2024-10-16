@@ -50,8 +50,11 @@ const bookAppointment = asyncHandler(async (req, res) => {
         user.medicalHistory.push(medicalHistoryEntry);
         await user.save();
     }
-
-    const html = appointmentHtml(doctorName, problem, date);
+    const app=await Appoint.findById(appoint._id)
+    console.log(app);
+    const appointid=app.appointmentId
+    console.log(appointid);
+    const html = appointmentHtml(doctorName, problem, date,appointid);
     await sendemail(req.user.email, 'Appointment Confirmation', html);
 
     const updatedDoctor = await Doctor.findById(d_id);

@@ -1,4 +1,4 @@
-const appointmentHtml = (doctorName, problem, date) => {
+const appointmentHtml = (doctorName, problem, date,appointid) => {
     return `
     <!DOCTYPE html>
     <html lang="en">
@@ -68,6 +68,7 @@ const appointmentHtml = (doctorName, problem, date) => {
             <p>Dear Valued Patient,</p>
             <p>We are pleased to confirm your appointment with the following details:</p>
             <p class="details">Doctor Name: ${doctorName}</p>
+            <p class="details">Appointment ID: ${appointid}</p>
             <p class="details">Problem: ${problem}</p>
             <p class="details">Date: ${date}</p>
             <p>Should you have any questions or require further assistance, please do not hesitate to contact us.</p>
