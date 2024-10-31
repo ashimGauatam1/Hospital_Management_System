@@ -48,10 +48,10 @@ const AppointSchema = new Schema({
   }
 });
 
+const Counter = mongoose.model("Counter", new Schema({ sequenceValue: { type: Number, default: 100000 } }));
 
 AppointSchema.pre("save", async function(next) {
   if (this.isNew) {
-    const Counter = mongoose.model("Counter", new Schema({ sequenceValue: { type: Number, default: 100000} }));
     const counter = await Counter.findOneAndUpdate(
       {},
       { $inc: { sequenceValue: 1 } },

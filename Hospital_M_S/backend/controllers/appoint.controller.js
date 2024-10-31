@@ -51,7 +51,6 @@ const bookAppointment = asyncHandler(async (req, res) => {
         await user.save();
     }
     const app=await Appoint.findById(appoint._id)
-    console.log(app);
     const appointid=app.appointmentId
     console.log(appointid);
     const html = appointmentHtml(doctorName, problem, date,appointid);
