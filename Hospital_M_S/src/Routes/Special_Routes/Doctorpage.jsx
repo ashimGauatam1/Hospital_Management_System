@@ -107,7 +107,7 @@ const DoctorPage = ({ handleLogout }) => {
                   </p>
                 </div>
                 <Link
-                  to={`/patient_info/${patient._id}`}
+                  to={`/doctor/patient_info/${patient._id}`}
                   className="text-white bg-cyan-600 hover:bg-cyan-700 font-semibold px-4 py-2 rounded-md shadow-lg transition-transform transform hover:scale-105 mt-4 md:mt-0"
                 >
                   View

@@ -31,7 +31,7 @@ const Login = () => {
       console.log(response.data.data);
         sessionStorage.setItem('doctor-token',response.data.data.id)
         sessionStorage.setItem('photo',response.data.data.photo)
-        navigate('/doctorpage')
+        navigate('/doctor/doctorpage')
       }
     } catch (err) {
       setError('Invalid id or password');

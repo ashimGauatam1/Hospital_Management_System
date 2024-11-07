@@ -18,11 +18,11 @@ const Footer = ({isStaff}) => {
         <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">Hospital</h2>
         <nav className="list-none mb-10">
           <li>
-            <Link to={'/doctorlogin'} className="text-gray-600 hover:text-gray-800">Doctor</Link>
+            <Link to={'/doctor/login'} className="text-gray-600 hover:text-gray-800">Doctor</Link>
           </li>
           { isStaff =='staff' ?
           <li>
-            <Link to={'/staff'} className="text-gray-600 hover:text-gray-800">Staff</Link>
+            <Link to={'/staff/'} className="text-gray-600 hover:text-gray-800">Staff</Link>
           </li>
           :<></>}
           
