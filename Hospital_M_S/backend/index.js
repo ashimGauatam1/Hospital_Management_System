@@ -1,9 +1,6 @@
 import express from "express";
 import { config } from "dotenv";
 import connectDB from "./db/db.js";
-import userRouter from './routes/user.auth.route.js'
-import doctorRouter from './routes/doctor.route.js'
-import appointRouter from './routes/appoint.route.js'
 import cookieParser from "cookie-parser";
 import cors from 'cors';
 
@@ -25,10 +22,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 
+import userRouter from './routes/user.auth.routes.js'
+import doctorRouter from './routes/doctor.routes.js'
+import appointRouter from './routes/appoint.routes.js'
+import labRouter from './routes/lab.routes.js'
+
 app.use('/api/v1/users',userRouter)
 app.use('/api/v1/doctor',doctorRouter)
 app.use('/api/v1/appoint',appointRouter)
-
+app.use('/api/v1/lab',labRouter)
 
 
 

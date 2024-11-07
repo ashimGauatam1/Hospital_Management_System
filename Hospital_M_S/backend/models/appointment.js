@@ -5,9 +5,9 @@ const AppointSchema = new Schema({
     type: mongoose.Types.ObjectId,
     ref: "User",
   },
-  doctorid:{
-    type:mongoose.Types.ObjectId,
-    ref:'Doctor'
+  doctorid: {
+    type: mongoose.Types.ObjectId,
+    ref: "Doctor",
   },
   appointmentId: {
     type: String,
@@ -21,20 +21,19 @@ const AppointSchema = new Schema({
     type: Number,
     required: [true, "Name is required"],
   },
-  phone:{
-    type:String,
-
+  phone: {
+    type: String,
   },
-  email:{
-    type:String,
+  email: {
+    type: String,
   },
   isconfirm: {
     type: Boolean,
     default: false,
   },
-  date:{
-    type:Date,
-    required:[true,"Date is required"]
+  date: {
+    type: Date,
+    required: [true, "Date is required"],
   },
   doctorName: {
     type: String,
@@ -43,14 +42,25 @@ const AppointSchema = new Schema({
     type: String,
     required: true,
   },
-  medicine:{
-    type:String
-  }
+  medicine: {
+    type: String,
+  },
+  lab: [{
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    sampleType: String,
+    charge: Number,
+    Additional: String,
+    appointment: { type: mongoose.Schema.Types.ObjectId, ref: 'Appoint' }
+}]
+
 });
 
-const Counter = mongoose.model("Counter", new Schema({ sequenceValue: { type: Number, default: 100000 } }));
+const Counter = mongoose.model(
+  "Counter",
+  new Schema({ sequenceValue: { type: Number, default: 100000 } })
+);
 
-AppointSchema.pre("save", async function(next) {
+AppointSchema.pre("save", async function (next) {
   if (this.isNew) {
     const counter = await Counter.findOneAndUpdate(
       {},
@@ -63,7 +73,6 @@ AppointSchema.pre("save", async function(next) {
   next();
 });
 
+const Appoint = mongoose.model("Appoint", AppointSchema);
 
-const Appoint=mongoose.model("Appoint",AppointSchema)
-
-export default Appoint
+export default Appoint;

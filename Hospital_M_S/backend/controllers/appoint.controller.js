@@ -52,7 +52,7 @@ const bookAppointment = asyncHandler(async (req, res) => {
     }
     const app=await Appoint.findById(appoint._id)
     const appointid=app.appointmentId
-    console.log(appointid);
+   
     const html = appointmentHtml(doctorName, problem, date,appointid);
     await sendemail(req.user.email, 'Appointment Confirmation', html);
 
