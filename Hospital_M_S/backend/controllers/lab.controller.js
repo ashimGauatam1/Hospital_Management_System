@@ -31,7 +31,34 @@ const requestLabReport = asyncHandler(async (req, res) => {
     );
 });
 
+const getAllReports = asyncHandler(async (req, res) => {
+    try {
 
+        const reports = await Appoint.find({ "lab.status": false }, { lab: 1, name: 1, date: 1 })
+        .populate("lab.user", "name email") 
+        .populate("lab.appointment", "appointmentId") 
+        .exec();
 
+      const filteredReports = reports.map((appointment) => ({
+        name: appointment.name,
+        date: appointment.date,
+        lab: appointment.lab.filter((report) => report.status === false),
+      }));
+      
+      res.status(200).json({
+        success: true,
+        data: filteredReports,
+      });
 
-export {requestLabReport}
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to retrieve lab reports",
+      });
+    }
+});
+
+  
+
+export {requestLabReport,getAllReports}

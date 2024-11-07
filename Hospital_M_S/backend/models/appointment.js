@@ -50,6 +50,7 @@ const AppointSchema = new Schema({
     sampleType: String,
     charge: Number,
     Additional: String,
+    status:{type:Boolean,default:false},
     appointment: { type: mongoose.Schema.Types.ObjectId, ref: 'Appoint' }
 }]
 
