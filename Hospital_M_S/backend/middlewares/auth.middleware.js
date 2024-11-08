@@ -7,7 +7,7 @@ const verifyUser = asyncHandler(async (req, res, next) => {
   try {
    
     const token = req.cookies.refreshToken;
-
+    
 
     if (!token) {
       throw new ApiError(400, "Invalid token");

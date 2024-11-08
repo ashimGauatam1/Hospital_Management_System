@@ -34,15 +34,12 @@ const requestLabReport = asyncHandler(async (req, res) => {
 const getAllReports = asyncHandler(async (req, res) => {
     try {
 
-        const reports = await Appoint.find({ "lab.status": false }, { lab: 1, name: 1, date: 1 })
+        const reports = await Appoint.find({ "lab.status": "pending" }, { lab: 1, name: 1, date: 1 })
         .populate("lab.user", "name email") 
         .populate("lab.appointment", "appointmentId") 
         .exec();
-
       const filteredReports = reports.map((appointment) => ({
-        name: appointment.name,
-        date: appointment.date,
-        lab: appointment.lab.filter((report) => report.status === false),
+        lab: appointment.lab.filter((report) => report.status === "pending"),
       }));
       
       res.status(200).json({
