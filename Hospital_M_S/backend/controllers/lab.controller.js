@@ -56,6 +56,8 @@ const getAllReports = asyncHandler(async (req, res) => {
     }
 });
 
+const submitReport=asyncHandler(async(req,res)=>{
   
+})
 
 export {requestLabReport,getAllReports}
