@@ -2,25 +2,35 @@ import React, { useState } from 'react';
 import { Aside } from '../../Components/aside';
 import useLabReports from '../../hooks/useLabReports';
 import LabReportForm from '../../Components/LabForm';
+import axios from 'axios';
+import usePDFGeneration from '../../hooks/usePDFGeneration';
 
 const LabReportsPage = () => {
+  const generatePDF=usePDFGeneration()
   const { labReports, isSubmitting, submitLabResult } = useLabReports();
   const [result, setResult] = useState({});
-  const [currentReport, setCurrentReport] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
+const [currentReport,setCurrentReport]=useState()
   const handleChange = (e) => {
     const { name, value } = e.target;
     setResult((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmitResult = () => {
-    if (currentReport) {
-      submitLabResult(currentReport.appointmentId, result);
-      setShowModal(false);
-      setResult({});
-      setCurrentReport(null);
-    }
+  const handleSubmitResult =async () => {
+  //  try {
+  //    const response = await axios.post("http://localhost:8080/api/v1/lab/submit", {
+  //      user: currentReport.user,
+  //      appointment: currentReport.appointment,
+  //      sampleType: currentReport.sampleType,
+  //      data: result,
+  //    });
+  //  } catch (error) {
+  //   console.log(error);
+  //  }
+  //  finally{
+  //   setShowModal(false)
+  //  }
+generatePDF(currentReport,result)
   };
 
   return (

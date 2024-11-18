@@ -79,7 +79,8 @@ const submitReport=asyncHandler(async(req,res)=>{
     }
 
     const labReport = new LabReport(labReportData);
-    await labReport.save();
+    labReport.status="completed"
+    // await labReport.save();
 
     res.status(201).json(
       new ApiResponse(

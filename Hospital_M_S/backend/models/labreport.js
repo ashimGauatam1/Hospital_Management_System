@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const LabReportSchema = new mongoose.Schema(
   {
     user: {
-      ty1pe: mongoose.Types.ObjectId,
+      type: mongoose.Types.ObjectId,
       ref: "User",
     },
     appointment: {
@@ -28,6 +28,10 @@ const LabReportSchema = new mongoose.Schema(
       WBCs: { type: String },
       parasites: { type: String },
     },
+    status:{
+        type:String,
+        default:"pending"
+    }
   },
   { timestamps: true }
 );
