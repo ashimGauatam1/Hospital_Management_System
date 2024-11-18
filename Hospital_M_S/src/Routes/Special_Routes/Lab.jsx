@@ -81,6 +81,7 @@ const Lab = () => {
 
   return (
     <>
+    <div className="flex min-h-screen mx-60">
       <Aside />
       <div className="container mx-auto p-6 space-y-8">
         <div className="flex justify-between items-center mb-6">
@@ -173,6 +174,7 @@ const Lab = () => {
             </form>
           </div>
         )}
+      </div>
       </div>
     </>
   );

@@ -1,4 +1,5 @@
 import Appoint from "../models/appointment.js";
+import LabReport from "../models/labreport.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/AsyncHandler.js";
@@ -57,7 +58,37 @@ const getAllReports = asyncHandler(async (req, res) => {
 });
 
 const submitReport=asyncHandler(async(req,res)=>{
-  
+    const { user, appointment, sampleType, data } = req.body;
+
+    if (!user || !appointment || !sampleType || !data) {
+      throw new ApiError(400,"all fields are required")
+    }
+
+    const labReportData = {
+      user,
+      appointment,
+      sampleType,
+    };
+
+    if (sampleType === 'blood') {
+      labReportData.bloodAnalysis = data;
+    } else if (sampleType === 'stool') {
+      labReportData.stoolAnalysis = data;
+    } else {
+      throw new ApiError(401,"invalid sample type")
+    }
+
+    const labReport = new LabReport(labReportData);
+    await labReport.save();
+
+    res.status(201).json(
+      new ApiResponse(
+        200,
+        "lab report get submitted",
+        labReport
+      )
+    );
+ 
 })
 
-export {requestLabReport,getAllReports}
+export {requestLabReport,getAllReports,submitReport}
