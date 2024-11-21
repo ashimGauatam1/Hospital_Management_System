@@ -51,7 +51,8 @@ const AppointSchema = new Schema({
     charge: Number,
     Additional: String,
     status:{type:String,default:"pending"},
-    appointment: { type: mongoose.Schema.Types.ObjectId, ref: 'Appoint' }
+    appointment: { type: mongoose.Schema.Types.ObjectId, ref: 'Appoint' },
+    file:{type:String}
 }]
 
 });

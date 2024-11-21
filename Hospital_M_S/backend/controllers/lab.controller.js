@@ -35,17 +35,15 @@ const requestLabReport = asyncHandler(async (req, res) => {
 const getAllReports = asyncHandler(async (req, res) => {
     try {
 
-        const reports = await Appoint.find({ "lab.status": "pending" }, { lab: 1, name: 1, date: 1 })
+        const reports = await Appoint.find ()
         .populate("lab.user", "name email") 
         .populate("lab.appointment", "appointmentId") 
         .exec();
-      const filteredReports = reports.map((appointment) => ({
-        lab: appointment.lab.filter((report) => report.status === "pending"),
-      }));
+     
       
       res.status(200).json({
         success: true,
-        data: filteredReports,
+        data: reports,
       });
 
     } catch (error) {
@@ -58,29 +56,6 @@ const getAllReports = asyncHandler(async (req, res) => {
 });
 
 const submitReport=asyncHandler(async(req,res)=>{
-    const { user, appointment, sampleType, data } = req.body;
-
-    if (!user || !appointment || !sampleType || !data) {
-      throw new ApiError(400,"all fields are required")
-    }
-
-    const labReportData = {
-      user,
-      appointment,
-      sampleType,
-    };
-
-    if (sampleType === 'blood') {
-      labReportData.bloodAnalysis = data;
-    } else if (sampleType === 'stool') {
-      labReportData.stoolAnalysis = data;
-    } else {
-      throw new ApiError(401,"invalid sample type")
-    }
-
-    const labReport = new LabReport(labReportData);
-    labReport.status="completed"
-    // await labReport.save();
 
     res.status(201).json(
       new ApiResponse(
@@ -93,3 +68,36 @@ const submitReport=asyncHandler(async(req,res)=>{
 })
 
 export {requestLabReport,getAllReports,submitReport}
+
+
+// const { user, appointment, sampleType, data } = req.body;
+
+//     if (!user || !appointment || !sampleType || !data) {
+//       throw new ApiError(400,"all fields are required")
+//     }
+
+//     const labReportData = {
+//       user,
+//       appointment,
+//       sampleType,
+//     };
+
+//     if (sampleType === 'blood') {
+//       labReportData.bloodAnalysis = data;
+//     } else if (sampleType === 'stool') {
+//       labReportData.stoolAnalysis = data;
+//     } else {
+//       throw new ApiError(401,"invalid sample type")
+//     }
+
+//     const labReport = new LabReport(labReportData);
+//     labReport.status="completed"
+//     // await labReport.save();
+
+//     res.status(201).json(
+//       new ApiResponse(
+//         200,
+//         "lab report get submitted",
+//         labReport
+//       )
+//     );
