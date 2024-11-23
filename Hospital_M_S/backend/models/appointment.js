@@ -50,7 +50,7 @@ const AppointSchema = new Schema({
     sampleType: String,
     charge: Number,
     Additional: String,
-    status:{type:String,default:"pending"},
+    status:{type:String,default:"pending",enum:["pending","completed"]},
     appointment: { type: mongoose.Schema.Types.ObjectId, ref: 'Appoint' },
     file:{type:String}
 }]

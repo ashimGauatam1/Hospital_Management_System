@@ -38,6 +38,7 @@ const getAllReports = asyncHandler(async (req, res) => {
         const reports = await Appoint.find ()
         .populate("lab.user", "name email") 
         .populate("lab.appointment", "appointmentId") 
+        .sort({'status':1})
         .exec();
      
       
