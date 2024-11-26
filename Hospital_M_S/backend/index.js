@@ -21,7 +21,7 @@ app.use(cors({
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-
+//routes
 import userRouter from './routes/user.auth.routes.js'
 import doctorRouter from './routes/doctor.routes.js'
 import appointRouter from './routes/appoint.routes.js'
@@ -33,7 +33,7 @@ app.use('/api/v1/appoint',appointRouter)
 app.use('/api/v1/lab',labRouter)
 
 
-
+//server
 app.listen(port,()=>{
     console.log(`Server is running at ${port}`);
 })
